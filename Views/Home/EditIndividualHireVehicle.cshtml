@@ -1,0 +1,104 @@
+﻿@model VehicleManagement.Models.hireModels.EditHireVehicle
+
+@{
+    ViewData["Title"] = "EditHireVehicle";
+    if (TempData["error"] != null)
+    {
+        <p style="color: red; font-weight: bold">@TempData["error"]</p>
+    }
+    else if (TempData["saved"] != null)
+    {
+        <p style="color: limegreen; font-weight: bold">@TempData["saved"]</p>
+    }
+    var userName = Context.User.Identity.Name.Replace("OAKTYRES\\", "");
+}
+
+<h1>EditHireVehicle</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditHireVehicle">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="OakPONumber" class="control-label"></label>
+                <input asp-for="OakPONumber" class="form-control" />
+                <span asp-validation-for="OakPONumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HiredFor" class="control-label"></label>
+                <input asp-for="HiredFor" class="form-control" />
+                <span asp-validation-for="HiredFor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VehicleRegistration" class="control-label"></label>
+                <input asp-for="VehicleRegistration" class="form-control" hidden="hidden" />
+                <span asp-validation-for="VehicleRegistration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Make" class="control-label"></label>
+                <input asp-for="Make" class="form-control" />
+                <span asp-validation-for="Make" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model" class="control-label"></label>
+                <input asp-for="Model" class="form-control" />
+                <span asp-validation-for="Model" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HireCompany" class="control-label"></label>
+                <input asp-for="HireCompany" class="form-control" />
+                <span asp-validation-for="HireCompany" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HireProvider" class="control-label"></label>
+                <input asp-for="HireProvider" class="form-control" />
+                <span asp-validation-for="HireProvider" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HiredFrom" class="control-label"></label>
+                <input asp-for="HiredFrom" class="form-control" />
+                <span asp-validation-for="HiredFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HiredTo" class="control-label"></label>
+                <input asp-for="HiredTo" class="form-control" />
+                <span asp-validation-for="HiredTo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReasonForHire" class="control-label"></label>
+                <textarea class="form-control" aria-label="with textarea" asp-for="ReasonForHire"></textarea>
+                <span asp-validation-for="ReasonForHire" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateAddedToMid" class="control-label"></label>
+                <input asp-for="DateAddedToMid" class="form-control" />
+                <span asp-validation-for="DateAddedToMid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateRemovedFromMid" class="control-label"></label>
+                <input asp-for="DateRemovedFromMid" class="form-control" />
+                <span asp-validation-for="DateRemovedFromMid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PayloadCapacity" class="control-label"></label>
+                <input asp-for="PayloadCapacity" class="form-control" />
+                <span asp-validation-for="PayloadCapacity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VehicleReplacing" class="control-label"></label>
+                <input asp-for="VehicleReplacing" class="form-control" />
+                <span asp-validation-for="VehicleReplacing" class="text-danger"></span>
+            </div>
+            <p hidden="hidden" id="user">@userName</p>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

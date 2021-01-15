@@ -1,0 +1,55 @@
+﻿@model VehicleManagement.Models.QRCodeModel
+@{
+    ViewData["Title"] = "GenerateQRCode";
+}
+
+<style>
+    img {
+        width: 500px;
+        height: 500px;
+        border: medium; 
+        padding: 4px;
+        border-radius: 10px;
+
+    }
+    #qrCode {
+        display: inline-block;
+        padding: 10px;
+        background-color: black; /*heh*/
+        border-radius: 10px;
+    }
+
+    #qrCode h5{
+        font-size: 80px;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+
+    @@media print {
+        img {
+            width: 500px;
+            height: 500px;
+            border: medium; 
+            padding: 4px;
+            border-radius: 10px;
+        }
+        #qrCode {
+            display: inline-block;
+            padding: 10px;
+            background-color: black; /*heh*/
+            border-radius: 10px;
+        }
+        #qrCode h5 {
+            font-size: 80px;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    }
+
+</style>
+<div id="qrCode">
+    <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QR))" />
+    <h5>@Model.VehicleRegistration</h5>
+</div>

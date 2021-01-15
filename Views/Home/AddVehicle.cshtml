@@ -1,0 +1,267 @@
+﻿@model VehicleManagement.Models.AddVehicleModel
+
+@{
+    ViewData["Title"] = "AddVehicle";
+    var userName = Context.User.Identity.Name.Replace("OAKTYRES\\", "");
+}
+
+<div id="responseConfirm">
+</div>
+
+<h1>Add Vehicle</h1>
+<p id="usName" hidden="hidden">@userName</p>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddVehicle">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Depot" class="control-label"></label>
+                <select asp-for="Depot" class="form-control" id="addDepot">
+                    <option value="1">Haydock</option>
+                    <option value="3">Leeds</option>
+                    <option value="7">Trafford</option>
+                    <option value="9">Tyne & Wear</option>
+                </select>
+
+                <span asp-validation-for="Depot" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VehicleRegistration" class="control-label"></label>
+                <input asp-for="VehicleRegistration" class="form-control" id="addReg" />
+                <span asp-validation-for="VehicleRegistration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Make" class="control-label"></label>
+                <select id="Makes" class="form-control">
+                </select>
+                <span asp-validation-for="Make" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model" class="control-label"></label>
+                <select id="Models" class="form-control">
+                </select>
+                <span asp-validation-for="Model" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WarrantyMileage" class="control-label"></label>
+                <input asp-for="WarrantyMileage" class="form-control" id="warrantyMileage" />
+                <span asp-validation-for="WarrantyMileage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" asp-format="{0:yyyy-MM-dd}" class="form-control" id="addStartDate" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" asp-format="{0:yyyy-MM-dd}" class="form-control" id="addEndDate" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MileageDate" class="control-label"></label>
+                <input asp-for="MileageDate" class="form-control" id="addMileageDate" />
+                <span asp-validation-for="MileageDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrentMileage" class="control-label"></label>
+                <input asp-for="CurrentMileage" class="form-control" id="addCurrentMileage" />
+                <span asp-validation-for="CurrentMileage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxDue" class="control-label"></label>
+                <input asp-for="TaxDue" asp-format="{0:yyyy-MM-dd}" class="form-control" id="addTaxDue" />
+                <span asp-validation-for="TaxDue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MotDue" class="control-label"></label>
+                <input asp-for="MotDue" asp-format="{0:yyyy-MM-dd}" class="form-control" id="addMotDue" />
+                <span asp-validation-for="MotDue" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label" asp-for="InWarranty"></label>
+                    <select asp-for="InWarranty" class="form-control" id="addInWarranty">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceInterval" class="control-label"></label>
+                <input asp-for="ServiceInterval" class="form-control" id="addServiceInterval" />
+                <span asp-validation-for="ServiceInterval" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Driver" class="control-label"></label>
+                <input asp-for="Driver" class="form-control" id="addDriver" />
+                <span asp-validation-for="Driver" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livery" class="control-label"></label>
+                <input asp-for="Livery" class="form-control" id="addLivery" />
+                <span asp-validation-for="Livery" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TyreSize" class="control-label"></label>
+                <input asp-for="TyreSize" class="form-control" id="addTyreSize" />
+                <span asp-validation-for="TyreSize" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label" asp-for="Camera"></label>
+                    <select asp-for="Camera" class="form-control" id="addCamera">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="Masternaught" class="control-label"></label>
+                <input asp-for="Masternaught" class="form-control" id="addMasternaught" />
+                <span asp-validation-for="Masternaught" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PayLoadCapacity" class="control-label"></label>
+                <input asp-for="PayLoadCapacity" class="form-control" id="addPayLoadCapacity" />
+                <span asp-validation-for="PayLoadCapacity" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="form-group">
+    <button type="button" value="Create" class="btn btn-primary" onclick="postAddedVehicle()">Create</button>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+<script>
+    function postAddedVehicle() {
+        var depot = document.getElementById("addDepot");
+        depot = depot.options[depot.selectedIndex].value;
+        var reg = $("#addReg").val();
+        var make = $("#Makes").text();
+        var model = $("#Models").text();
+        var warrMileage = $("#warrantyMileage").val();
+        var stDate = $("#addStartDate").val();
+        var enDate = $("#addEndDate").val();
+        var milDate = $("#addMileageDate").val();
+        var currMileage = $("#addCurrentMileage").val();
+        var taxDue = $("#addTaxDue").val();
+        var motDue = $("#addMotDue").val();
+        var inWarranty = document.getElementById("addInWarranty");
+        inWarranty = inWarranty.options[inWarranty.selectedIndex].value;
+        var serviceInterval = $("#addServiceInterval").val();
+        var driver = $("#addDriver").val();
+        var livery = $("#addLivery").val();
+        var tyreSize = $("#addTyreSize").val();
+        var camera = document.getElementById("addCamera");
+        camera = camera.options[camera.selectedIndex].value;
+        var masternaught = $("#addMasternaught").val();
+        var payLoad = $("#addPayLoadCapacity").val();
+        var user = $("#usName").html();
+
+        //if (inWarranty.checked) {
+        //    inWarranty = "Yes"
+        //}
+        //else if (!inWarranty.checked){
+        //    inWarranty = "No";
+        //}
+
+        ////if ($("#addInWarranty").is(':checked')) {
+        ////    inWarranty = "Yes"
+        ////}
+        ////else if (!$("#addInWarranty").is(':checked') ) {
+        ////    inWarranty = "No"
+        ////}
+
+        //if (camera.checked) {
+        //    camera = "Yes"
+        //}
+        //else if (!camera.checked){
+        //    camera = "No";
+        //}
+
+        //if ($("#addCamera").is(':checked')) {
+        //    camera = "Yes"
+        //}
+        //else if (!$("#addCamera").is(':checked')) {
+        //    camera = "No"
+        //}
+
+        var data = {
+            Depot: depot, VehicleRegistration: reg, Make: make, Model: model, WarrantyMileage: warrMileage,
+            StartDate: stDate, EndDate: enDate, MileageDate: milDate, CurrentMileage: currMileage, Taxdue: taxDue,
+            MotDue: motDue, InWarranty: inWarranty, ServiceInterval: serviceInterval, Driver: driver, Livery: livery,
+            TyreSize: tyreSize, Camera: camera, Masternaught: masternaught, PayLoadCapacity: payLoad
+        };
+        $.post("/Home/AddVehicle", { 'vehicle': data, 'user': user }, function (html) {
+            var $div = $('<div class="text-center"></div>');
+            $div.html(html);
+            $("#responseConfirm").append($div);
+            window.scrollTo(0, 0);
+        });
+    };
+    $(document).ready(function () {
+        $("#Makes").select2({
+            placeholder: "Select a make",
+            allowClear: true,
+            ajax: {
+                url: '/Home/GetVehicleMakes',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+        });
+
+        $("#Models").select2({
+            placeholder: "Select a model",
+            allowClear: true,
+            ajax: {
+                url: '/Home/GetVehicleModels',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+        });
+    });
+</script>

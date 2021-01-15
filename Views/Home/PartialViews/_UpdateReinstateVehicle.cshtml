@@ -1,0 +1,84 @@
+﻿@model VehicleManagement.Models.VehicleRegistrationModel
+@{
+    var discontinueDate = DateTime.Now.ToShortDateString();
+    discontinueDate = discontinueDate.ToString().Replace("/", "-");
+    var reg = Model.VehicleReg.ToString();
+    var userName = Context.User.Identity.Name.Replace("OAKTYRES\\", "");
+}
+<!-- Modal -->
+<div class="modal fade" id="updateReinstateVehicle" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="padding:35px 50px;">
+                <h3><label class="text-primary">@Model.VehicleReg.ToString()</label></h3>
+                <button id="closeButtonReinstateUpdate" type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4><span class="glyphicon glyphicon-lock"></span></h4>
+            </div>
+            <div class="modal-body border " style="padding:40px 50px;">
+                <div class="input-group">
+                    <label class="form-control" hidden="hidden">Van Registration</label>
+                    @*<p style="color: crimson; font-weight: bold" name="vanReg" id="vanReg">@Model.VehicleReg.ToString()</p>*@
+                    <input type="text" value=@Model.VehicleReg.ToString() name="vanReg" id="vanReg" hidden="hidden" />
+                </div>
+                <br />
+                <div class="input-group">
+                    <select id="reinstateReason">
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Comments (Optional)</span>
+                    </div>
+                    <textarea class="form-control" aria-label="with textarea" id="reinstateComments"></textarea>
+                </div>
+
+            </div>
+            <p hidden="hidden" id="reinstateDate">@discontinueDate</p>
+            <p hidden="hidden" id="reinstateReg">@reg</p>
+            <p hidden="hidden" id="reinstateUser">@userName</p>
+
+            <div class="modal-footer clearfix">
+                <button type="submit" id="updateReinstateRecord" class="btn btn-success btn-default float-left" onclick="postReinstateVehicle()" ><span class="glyphicon glyphicon-remove"></span>Reinstate</button>
+                <button type="submit" id="cancelReinstate" class="btn btn-danger btn-default float-left" data-dismiss="modal" onclick="window.location='/Home/ReinstateVehicle'"><span class="glyphicon glyphicon-remove"></span>Cancel</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#updateReinstateVehicle").modal();
+    });
+    $(document).ready(function () {
+        $("#reinstateReason").select2({
+            placeholder: "  Select a reason for reinstating   ",
+            allowClear: true,
+            ajax: {
+                url: '/Home/GetReinstateReasons',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+        });
+    });
+</script>

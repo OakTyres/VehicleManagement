@@ -1,0 +1,319 @@
+﻿@model VehicleManagement.Models.VehicleDefectsDetailModel
+@{
+    ViewData["Title"] = "IndividualVehicleDefects";
+}
+
+<h1>Defect Details for @Model.VanRegistration </h1>
+<div class="text-center container-fluid">
+    <h4>Exterior</h4>
+    <div class="container">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4   shadow-sm ">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Lights/Indicators</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsLightsIndicators</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Reflectors</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsReflectorsMarkers</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Mirrors</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsMirrors</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Body Panels</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsBodyPanels</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Doors</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsDoorsCondition</li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* break in the page for displaying second row of tiles*@
+    <h4>Engine/Mechanical</h4>
+    <div class="container">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4   shadow-sm ">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Oil/Coolant</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsOilCoolantLevel</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">AdBlue</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsAdBlueLevel</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Fuel Oil Leaks</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsFuelOilLeaks</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Battery</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsBattery</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Exhaust/Smoke</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsExhaustAndSmoke</li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* break in the page for displaying second row of tiles*@
+    <h4>Interior/ Cockpit</h4>
+    <div class="container">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4   shadow-sm ">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Horn</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsHorn</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Speedometer</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsSpeedometer</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Seatbelts</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsSeatBelts</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Instrument Panel</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsInstrumentPanel</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Dashcam</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsDashcam</li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* break in the page for displaying second row of tiles*@
+    <h4>Road Safety</h4>
+    <div class="container">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4   shadow-sm ">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Tyres</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">NSF - @Model.NSFDepth</li>
+                        <li style="font-weight: bold;">OSF - @Model.OSFDepth</li>
+                        <li style="font-weight: bold;">NSR - @Model.NSRDepth</li>
+                        <li style="font-weight: bold;">OSR - @Model.OSRDepth</li>
+                        <li style="font-weight: bold;">Spare - @Model.SpareDepth</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Wheels</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsWheels</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Wipers/Washers</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsWipersAndWashers</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Windscreen</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsWindscreenCondition</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Fire Extinguisher</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsFireExtinguisher</li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* break in the page for displaying second row of tiles*@
+    <h4>Misc/ Other</h4>
+    <div class="container">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4   shadow-sm ">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Alcohol/Drugsa</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsAlcoholOrDrugs</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Driving License</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsDrivingLicense</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">First Aid</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsFirstAidKit</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Wheel Change Kit</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsWheelChangingKit</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h6 class="my-0 font-weight-normal">Warning Triangle</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li style="font-weight: bold;">@Model.CommentsWarningTriangle</li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

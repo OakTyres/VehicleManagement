@@ -1,0 +1,238 @@
+﻿@model VehicleManagement.Models.hireModels.AddHireVehicleModel
+@{
+    var userName = Context.User.Identity.Name.Replace("OAKTYRES\\", "");
+}
+<div id="responseHireConfirm">
+</div>
+<div id="depotForm">
+    <div class="row">
+        <div class="col-md-4">
+
+            <form asp-action="AddHireVehicle">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Id" class="control-label" hidden="hidden"></label>
+                    <input asp-for="Id" class="form-control" hidden="hidden" />
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OakPONumber" class="control-label" ></label>
+                    <input asp-for="OakPONumber" class="form-control" id="poNumber"/>
+                    <span asp-validation-for="OakPONumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HiredFor" class="control-label"></label>
+                    <select asp-for="HiredFor" class="form-control" id="hiredFor">
+                        <option value="Haydock">Haydock</option>
+                        <option value="Leeds">Leeds</option>
+                        <option value="Trafford">Trafford</option>
+                        <option value="Tyne">Tyne & Wear</option>
+                    </select>
+                    <span asp-validation-for="HiredFor" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="VehicleRegistration" class="control-label"></label>
+                    <input asp-for="VehicleRegistration" class="form-control" id="vehicleReg" />
+                    <span asp-validation-for="VehicleRegistration" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="VehicleReplacing" class="control-label"></label>
+                    <select class="form-control" id="vehicleReplacing">
+                    </select>
+                    <span asp-validation-for="VehicleReplacing" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Make" class="control-label"></label>
+                    <select id="hireMakes" class="form-control">
+                    </select>
+                    <span asp-validation-for="Make" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Model" class="control-label"></label>
+                    <select id="hireModels" class="form-control">
+                    </select>
+                    <span asp-validation-for="Model" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HireCompany" class="control-label"></label>
+                    <input asp-for="HireCompany" class="form-control" id="hireCompany" />
+                    <span asp-validation-for="HireCompany" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HireProvider" class="control-label"></label>
+                    <input asp-for="HireProvider" class="form-control" id="hireProvider" />
+                    <span asp-validation-for="HireProvider" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HiredFrom" class="control-label"></label>
+                    <input asp-for="HiredFrom" asp-format="{0:yyyy-MM-dd}" class="form-control" id="hiredFrom" />
+                    <span asp-validation-for="HiredFrom" class="text-danger"></span>
+                </div>
+                @*<div class="form-group">
+            <label asp-for="HiredTo" class="control-label"></label>
+            <input asp-for="HiredTo" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+            <span asp-validation-for="HiredTo" class="text-danger"></span>
+        </div>*@
+                <div class="form-group">
+                    <label asp-for="ReasonForHire" class="control-label"></label>
+                    <textarea class="form-control" aria-label="with textarea" asp-for="ReasonForHire" id="reason"></textarea>
+                    <span asp-validation-for="ReasonForHire" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Has it been added to mid?</label>
+                    @*<input asp-for="DateAddedToMid" asp-format="{0:yyyy-MM-dd}" class="form-control" id="addedToMid" />*@
+                    <select asp-for="DateAddedToMid" class="form-control" id="addedToMid">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                    <span asp-validation-for="DateAddedToMid" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PayLoadCapacity" class="control-label"></label>
+                    <input asp-for="PayLoadCapacity" class="form-control" id="payloadCapacity" />
+                    <span asp-validation-for="PayLoadCapacity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <p id="usName" hidden="hidden">@userName</p>
+                </div>
+                @*<div class="form-group">
+            <label asp-for="DateRemovedFromMid" class="control-label"></label>
+            <input asp-for="DateRemovedFromMid" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+            <span asp-validation-for="DateRemovedFromMid" class="text-danger"></span>
+        </div>*@
+                @*<div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>*@
+            </form>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <button type="button" value="Create" class="btn btn-primary" onclick="postHireDepotVehicle()">Create</button>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    function postHireDepotVehicle() {
+        var depot = document.getElementById("hiredFor");
+        depot = depot.options[depot.selectedIndex].value;
+        var poNumber = $("#poNumber").val();
+        var reg = $("#vehicleReg").val();
+        var make = $("#hireMakes").text();
+        var model = $("#hireModels").text();
+        var hireFrom = $("#hiredFrom").val();
+        var hiredTo = $("#hiredTo").val();
+        var hireCompany = $("#hireCompany").val();
+        var hireProvider = $("#hireProvider").val();
+        var reasonForHire = $("#reason").val();
+        var dateAddedToMid = $("#addedToMid").val();
+        var dateRemovedFromMid = $("#dateRemovedFromMid").val();
+        var vehicleReplacing = $("#vehicleReplacing").text().trim();
+        var payLoad = $("#payloadCapacity").val();
+        var user = $("#usName").html();
+        if (dateAddedToMid == 1) {
+            dateAddedToMid = hireFrom
+        }
+        else {
+                dateAddedToMid = null
+        }
+
+        var data = {
+            HiredFor: depot, VehicleRegistration: reg, Make: make, Model: model,
+            HireCompany: hireCompany, HireProvider: hireProvider, HiredFrom: hireFrom, ReasonForHire: reasonForHire,
+            DateAddedToMid: dateAddedToMid, PayLoadCapacity: payLoad, VehicleReplacing: vehicleReplacing, OakPONumber: poNumber
+        };
+        $.post("/Home/AddHireVehicle", { 'hireVehicle': data, 'user': user, 'requestId': 2 }, function (html) {
+            var $div = $('<div class="text-center"></div>');
+            $div.html(html);
+            $("#responseHireConfirm").append($div);
+            window.scrollTo(0, 0);
+        });
+    };
+    $(document).ready(function () {
+        $("#hireMakes").select2({
+            placeholder: "Select a make",
+            allowClear: true,
+            ajax: {
+                url: '/Home/GetVehicleMakes',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+        });
+
+        $("#hireModels").select2({
+            placeholder: "Select a model",
+            allowClear: true,
+            ajax: {
+                url: '/Home/GetVehicleModels',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+        });
+
+        $("#vehicleReplacing").select2({
+            placeholder: "Select a reg",
+            allowClear: true,
+            ajax: {
+                url: '/Home/GetAllVehicleRegistrations',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+        });
+    });
+</script>

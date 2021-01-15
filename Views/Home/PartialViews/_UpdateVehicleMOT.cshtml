@@ -1,0 +1,64 @@
+﻿@model VehicleManagement.Models.VehicleRegistrationModel
+@{ 
+    var userName = Context.User.Identity.Name.Replace("OAKTYRES\\", "");
+}
+<!-- Modal -->
+<div class="modal fade" id="updateVehicleMOT" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="padding:35px 50px;">
+                <h3><label class="text-primary">@Model.VehicleReg.ToString()</label></h3>
+                <button id="closeButtonMOTUpdate" type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4><span class="glyphicon glyphicon-lock"></span></h4>
+            </div>
+            <div class="modal-body border " style="padding:40px 50px;">
+                <form role="form" method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="UploadMOTUpdate">
+                    <div class="input-group">
+                        <label class="form-control">When will the MOT expire?</label>
+                        <input type="date" name="motMonths" id="motMonths" />
+                    </div>
+                    <br />
+                    <div class="input-group">
+                        <label class="form-control" hidden="hidden">Van Registration</label>
+                        @*<p style="color: crimson; font-weight: bold" name="vanReg" id="vanReg">@Model.VehicleReg.ToString()</p>*@
+                        <input type="text" value=@Model.VehicleReg.ToString() name="vanReg" id="vanReg" hidden="hidden" />
+                    </div>
+                    <br />
+                    <div class="input-group">
+                        <label class="form-control" hidden="hidden">Upload your MOT confirmation documents</label>
+                        <input type="text" value="7" name="reasonCode" id="reasonCode" hidden="hidden" />
+                    </div>
+                    <br />
+                    <div class="input-group">
+                        <label class="form-control" hidden="hidden"></label>
+                        <input type="text" value="@userName" name="userName" id="userName" hidden="hidden" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control">Upload your MOT confirmation documents</label>
+                        <input type="file" name="update" id="update" />
+                    </div>
+                    <input type="submit" id="updateMOTRecord" class="btn btn-success btn-default float-left" value="Update" /><span class="glyphicon glyphicon-remove"></span>
+                </form>
+            </div>
+
+
+            <div class="modal-footer clearfix">
+                <button type="submit" id="cancelMOT" class="btn btn-danger btn-default float-left" data-dismiss="modal" onclick="window.location='/Home/UpcomingMOT'"><span class="glyphicon glyphicon-remove"></span>Cancel</button>
+                
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#updateVehicleMOT").modal();
+    });
+    var docs = document.getElementById("motDoc").files[0];
+    var formData = new formData();
+
+    formData.append("docs", docs);
+    fetch('Home/UpdateVehicleMOT', { method: "POST", body: formData });
+</script>

@@ -1,0 +1,54 @@
+﻿@{ 
+    ViewData["Title"] = "Vehicles";
+    var userName = Context.User.Identity.Name.Replace("OAKTYRES\\","");
+}
+<div class="text-center jumbotron bg-dark">
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center bg-dark">
+    <h1 class="display-4 " style="color:antiquewhite">Vehicle Management Tool </h1>
+</div>
+<div class="container">
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4   shadow-sm ">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Fleet</h4>
+            </div>
+            <div class="card-body " style="color:blue">
+                <a href="/Home/AddVehicle" class="list-group-item">Add vehicle</a><br />
+                <a href="/Home/AddMakeModel" class="list-group-item">Add make/ model</a><br />
+                <a href="/Home/DiscontinueVehicle" class="list-group-item" style="color: crimson; font-weight: bold">Discontinue</a><br />
+            </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Edit Vehicle</h4>
+            </div>
+            <div class="card-body" style="color:darkgreen">
+                <a href="/Home/EditVehicle" class="list-group-item" style="color: darkgreen">Edit details</a><br />
+                <a href="/Home/ReinstateVehicle" class="list-group-item" style="color: darkgreen">Reinstate a vehicle</a><br />
+                <a href="/Home/Vehicles" class="list-group-item" style="color: darkgreen">Not Available</a><br />
+            </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Maintenance</h4>
+            </div>
+            <div class="card-body" style="color:crimson">
+                <a href="/Home/UpcomingServices" class="list-group-item" style="color: crimson">Service Tracking</a><br />
+                <a href="/Home/UpcomingMOT" class="list-group-item" style="color: crimson">MOT Tracking</a><br />
+                <a href="/Home/UpcomingTax" class="list-group-item" style="color: crimson">Tax Tracking</a><br />
+                <a href="/Home/UpcomingWarranty" class="list-group-item" style="color: crimson">Warranty Tracking</a><br />
+            </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Hire</h4>
+            </div>
+            <div class="card-body" style="color: goldenrod">
+                <a href="/Home/AddHireVehicle" class="list-group-item" style="color: goldenrod">Add vehicle</a><br />
+                <a href="/Home/GetHireVehiclesForEdit" class="list-group-item" style="color: goldenrod">Manage vehicle</a><br />
+                <a href="/Home/DiscontinueHireVehicle" class="list-group-item" style="color: goldenrod; font-weight: bold">Off hire</a><br />
+            </div>
+        </div>
+    </div>
+</div>
+    </div>

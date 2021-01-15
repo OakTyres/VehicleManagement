@@ -1,0 +1,42 @@
+﻿@model VehicleManagement.Models.VehicleRegistrationModel
+@{
+    var userName = Context.User.Identity.Name.Replace("OAKTYRES\\", "");
+}
+<!-- Modal -->
+<div class="modal fade" id="updateVehicleWarranty" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="padding:35px 50px;">
+                <h3><label class="text-primary">@Model.VehicleReg.ToString()</label></h3>
+                <button id="closeButtonWarrantyUpdate" type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4><span class="glyphicon glyphicon-lock"></span></h4>
+            </div>
+            <div class="modal-body border " style="padding:40px 50px;">
+                <form role="form" method="post" asp-controller="Home" asp-action="UploadWarrantyUpdate">
+
+                    <div class="input-group">
+                        <label class="form-control" hidden="hidden">Van Registration</label>
+                        <input type="text" value=@Model.VehicleReg.ToString() name="vanReg" id="vanReg" hidden="hidden" />
+                    </div>
+                    <br />
+                    <div class="input-group">
+                        <label class="form-control" style="color: crimson; font-weight: bold">Confirm this vehicle is now out of warranty.</label>
+                    </div>
+
+                    <input type="submit" id="updateWarrantyRecord" class="btn btn-success btn-default float-left" value="Confirm" /><span class="glyphicon glyphicon-remove"></span>
+                </form>
+            </div>
+            <div class="modal-footer clearfix">
+                <button type="submit" id="cancelUpdateWarranty" class="btn btn-danger btn-default float-right" data-dismiss="modal" onclick="window.location='/Home/UpcomingWarranty'"><span class="glyphicon glyphicon-remove"></span>Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#updateVehicleWarranty").modal();
+    });
+</script>

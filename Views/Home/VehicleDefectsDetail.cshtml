@@ -1,0 +1,44 @@
+﻿@model List<VehicleManagement.Models.VehicleDefectsDetailModel>
+@{
+    ViewData["Title"] = "VehicleDefectsDetail";
+    var depot = "";
+    foreach (var item in Model)
+    {
+        depot = item.Depot;
+    }
+}
+
+<h1>Reported defects in @depot </h1>
+
+<table class="table" width="100%" id="dTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>Vehicle Reg</th>
+            <th>Assigned Driver</th>
+            <th>Current Driver</th>
+            <th>Total Defects</th>
+            <th>Defects</th>
+        </tr>
+    </thead>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@item.VanRegistration</td>
+            <td>@item.UsualDriver</td>
+            <td>@item.CurrentDriver</td>
+            <td>@item.TotalDefects</td>
+            <td><button type="button" class="btn btn-sm btn-warning" onclick="loadDefectsDetail('@item.VanRegistration')">See defects</button></td>
+        </tr>
+    }
+</table>
+<script>
+    function loadDefectsDetail(reg) {
+        window.location = '/Home/IndividualVehicleDefects?reg=' + reg;
+    }
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true,
+            lengthMenu: [20, 50, 100, 150, 200]
+        });
+    });
+</script>

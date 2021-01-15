@@ -1,0 +1,54 @@
+﻿@model VehicleManagement.Models.VehicleRegistrationModel
+@{
+    var userName = Context.User.Identity.Name.Replace("OAKTYRES\\", "");
+}
+<!-- Modal -->
+<div class="modal fade" id="updateVehicleTax" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="padding:35px 50px;">
+                <h3><label class="text-primary">@Model.VehicleReg.ToString()</label></h3>
+                <button id="closeButtonTaxUpdate" type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4><span class="glyphicon glyphicon-lock"></span></h4>
+            </div>
+            <div class="modal-body border " style="padding:40px 50px;">
+                <form role="form" method="post" asp-controller="Home" asp-action="UploadTAXUpdate">
+
+                    <div class="input-group">
+                        <label class="form-control" hidden="hidden">Van Registration</label>
+                        <input type="text" value=@Model.VehicleReg.ToString() name="vanReg" id="vanReg" hidden="hidden" />
+                    </div>
+                    <br />
+                    <div class="input-group">
+                        <label class="form-control">When will the tax expire?</label>
+                        <input type="date" name="taxMonths" id="taxMonths"/>
+                    </div>
+                    <br />
+                    <div class="input-group">
+                        <label class="form-control" hidden="hidden">Upload your MOT confirmation documents</label>
+                        <input type="text" value="9" name="reasonCode" id="reasonCode" hidden="hidden" />
+                    </div>
+                    <div class="input-group">
+                        <label class="form-control" hidden="hidden"></label>
+                        <input type="text" value="@userName" name="userName" id="userName" hidden="hidden" />
+                    </div>
+
+                    <input type="submit" id="updateTaxRecord" class="btn btn-success btn-default float-left" value="Update" /><span class="glyphicon glyphicon-remove"></span>
+                </form>
+            </div>
+
+
+            <div class="modal-footer clearfix">
+                <button type="submit" id="cancelUpdateTax" class="btn btn-danger btn-default float-right" data-dismiss="modal" onclick="window.location='/Home/UpcomingTax'"><span class="glyphicon glyphicon-remove"></span>Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#updateVehicleTax").modal();
+    });
+</script>

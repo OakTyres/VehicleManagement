@@ -1,0 +1,81 @@
+﻿@model VehicleManagement.Models.VehicleRegistrationModel
+@{ 
+    var discontinueDate = DateTime.Now.ToShortDateString();
+    discontinueDate = discontinueDate.ToString().Replace("/", "-");
+    var reg = Model.VehicleReg.ToString();
+    var userName = Context.User.Identity.Name.Replace("OAKTYRES\\", "");
+}
+
+<!-- Modal -->
+<div class="modal fade" id="discontinueVehicle" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="padding:35px 50px;">
+                <h3><label class="text-primary">You are about to take</label><label class="text-danger"> @Model.VehicleReg.ToString() </label><label class="text-primary"> off the road </label></h3>
+                <button id="closeButtonDiscontinue" type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4><span class="glyphicon glyphicon-lock"></span></h4>
+            </div>
+            <div class="modal-body border " style="padding:40px 50px;">
+                @*<form role="form">*@
+                    <label class="control-label"> Select a reason</label>
+                    <div class="input-group mb-3">
+                        <select class="form-control" id="reasonList" style="width:auto">
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Comments (Optional)</span>
+                        </div>
+                        <textarea class="form-control" aria-label="with textarea" id="discontinueComments"></textarea>
+                    </div>
+                    <p hidden="hidden" id="discontinueDate">@discontinueDate</p>
+                    <p hidden="hidden" id="vReg">@reg</p>
+                    <p hidden="hidden" id="discontinueUser">@userName</p>
+                @*</form>*@
+            </div>
+
+
+            <div class="modal-footer clearfix">
+                <button type="button" id="cancelUpdateDiscontinue" class="btn btn-danger btn-default float-right" data-dismiss="modal" onclick="window.location='/Home/DiscontinueVehicle'"><span class="glyphicon glyphicon-remove"></span>Cancel</button>
+                <button type="button" id="updateDiscontinueRecord" class="btn btn-success btn-default float-left" data-dismiss="modal" onclick="postDiscontinueVehicle()"><span class="glyphicon glyphicon-remove"></span>Discontinue</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#discontinueVehicle").modal();
+    });
+    $(document).ready(function () {
+        $("#reasonList").select2({
+            placeholder: "  Select a reason for discontinuing   ",
+            allowClear: true,
+            ajax: {
+                url: '/Home/GetDiscontinueReasons',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+        });
+    });
+</script>

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<VehicleManagement.Models.ReinstateVehicleModel>
+@{
+    ViewData["Title"] = "ReinstateVehicle";
+    
+}
+
+<h1>Reinstate a vehicle</h1>
+    <table class="table" width="100%" id="dTable">
+
+        <thead class="thead-dark">
+            <tr>
+                <th>Depot</th>
+                <th>Reg</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Mileage</th>
+                <th>Warranty Mileage</th>
+                <th>End Date</th>
+                <th>Mileage Checked</th>
+                <th>Last Action</th>
+                <th>Last Action Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        @foreach (var subItem in Model)
+        {
+    <tr>
+        <td>@subItem.Depot</td>
+        <td>@subItem.VanRegistration.ToString()</td>
+        <td>@subItem.Make.Trim()</td>
+        <td>@subItem.Model.Trim()</td>
+        <td>@subItem.CurrentMileage</td>
+        <td>@subItem.WarrantyMileage</td>
+        <td>@subItem.EndDate.ToString().Replace("/", "-").Substring(0, 10)</td>
+        <td>@subItem.MileageLastChecked.ToString().Replace("/", "-").Substring(0, 10)</td>
+        <td>@subItem.LastAction</td>
+        <td>@subItem.LastActionDate.ToString().Replace("/", "-").Substring(0, 10)</td>
+        <td><button type="button" class="btn btn-warning" onclick="reinstateUpdaterModal('@subItem.VanRegistration.ToString()')">Reinstate</button></td>
+    </tr>
+        }
+    </table>
+<div id="reinstateUpdater"></div>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true
+        });
+    });
+</script>

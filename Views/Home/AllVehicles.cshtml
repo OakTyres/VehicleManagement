@@ -1,0 +1,42 @@
+﻿@model List<VehicleManagement.Models.DiscontinueVehicleModel>
+@{
+    ViewData["Title"] = "AllVans";
+}
+
+<h1>Which van would you like to create a QR code for?</h1>
+<br />
+<button id="downloadButton" class="btn-link" style="align-self: start" onclick="exportTableToExcel('dTable', filename = 'report')">Download</button>
+<table class="table" width="100%" id="dTable">
+<thead class="thead-dark">
+    <tr>
+        <th>Depot</th>
+        <th>Vehicle Reg</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>In Warranty</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Action</th>
+    </tr>
+</thead>
+@foreach (var subItem in Model)
+{
+    <tr>
+        <td>@subItem.DepotName</td>
+        <td>@subItem.VanRegistration.ToString()</td>
+        <td>@subItem.Make</td>
+        <td>@subItem.Model</td>
+        <td>@subItem.InWarranty</td>
+        <td>@subItem.StartDate.ToString().Replace("/", "-").Substring(0, 10)</td>
+        <td>@subItem.EndDate.ToString().Replace("/", "-").Substring(0, 10)</td>
+        <td>@Html.ActionLink("Get Code", "GenerateQRCode", new { vehicleRegistration = subItem.VanRegistration })</td>
+    </tr>
+}
+</table>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true
+        });
+    });
+</script>

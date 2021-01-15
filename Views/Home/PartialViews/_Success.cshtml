@@ -1,0 +1,8 @@
+﻿@if (TempData["notice"] != null)
+{
+    <p style="color: red; font-weight: bold">@TempData["notice"]</p>
+}
+
+<a href="/Home/AddVehicle">Add another vehicle</a>
+<br />
+<a href="/Home/Vehicles">Back to vehicle management</a>

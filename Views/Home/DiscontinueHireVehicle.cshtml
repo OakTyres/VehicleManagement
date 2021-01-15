@@ -1,0 +1,52 @@
+﻿@model List<VehicleManagement.Models.hireModels.EditHireVehicle>
+@{
+    ViewData["Title"] = "DiscontinueHireVehicle";
+}
+
+<h1>Off Hire Vehicle</h1>
+
+<div id="vehicleList">
+    <table class="table" width="100%" id="dTable">
+        <thead class="thead-dark">
+            <tr>
+                <th hidden="hidden">Id</th>
+                <th>Vehicle Reg</th>
+                <th>Hired For</th>
+                <th>PO Number</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Hire Company</th>
+                <th>Hire Provider</th>
+                <th>Hired To</th>
+                <th>Date Removed from Mid</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td hidden="hidden">@item.Id</td>
+                <td>@item.VehicleRegistration</td>
+                <td>@item.HiredFor</td>
+                <td>@item.OakPONumber</td>
+                <td>@item.Make</td>
+                <td>@item.Model</td>
+                <td>@item.HireCompany</td>
+                <td>@item.HireProvider</td>
+                <td>@item.HiredTo</td>
+                <td>@item.DateRemovedFromMid</td>
+                <td><button type="button" class="btn-warning" onclick="loadHireDiscontinueModal('@item.VehicleRegistration')">Discontinue</button></td>
+            </tr>
+        }
+    </table>
+</div>
+<div id="discontinueHireModal">
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true
+        });
+    });
+</script>

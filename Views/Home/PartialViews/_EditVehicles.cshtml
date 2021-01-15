@@ -1,0 +1,39 @@
+﻿@model List<VehicleManagement.Models.EditVehicle>
+
+@{
+    ViewData["Title"] = "EditVehicle";
+}
+<div id="vehicleList">
+    <button id="downloadButton" class="btn-link" style="align-self: start" onclick="exportTableToExcel('dTable', filename = 'report')">Download</button>
+    <table class="table" width="100%" id="dTable">
+        <thead class="thead-dark">
+            <tr>
+                <th hidden="hidden">Id</th>
+                <th>Depot</th>
+                <th>Vehicle Reg</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td hidden="hidden">@item.Id</td>
+                <td>@item.Depot</td>
+                <td>@item.VanRegistration.ToString()</td>
+                <td>@item.Make</td>
+                <td>@item.Model</td>
+                <td>@Html.ActionLink("Edit", "LoadVehicleForEdit", new { Id = item.Id })</td>
+            </tr>
+        }
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true,
+            lengthMenu: [5, 10, 20, 50, 100, 150, 200]
+        });
+    });
+</script>

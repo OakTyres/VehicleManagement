@@ -1,0 +1,168 @@
+﻿
+@model VehicleInspectionDetailsModel
+
+@{
+    ViewData["Title"] = "VehicleInspectionDetail";
+}
+
+<h1>VehicleInspectionDetail</h1>
+
+
+
+
+
+
+
+
+
+@*<h1>Vehicle Inspection</h1>*@
+
+<table class="table" width="100%" id="dTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>depot</th>
+            <th>vehicleRegistration</th>
+            <th>vehicleMake</th>
+            <th>mileage</th>
+            <th>driverFullname</th>
+            <th>lightsIndicators</th>
+            <th>reflectorMarkers</th>
+            <th>mirrors</th>
+            <th>oilCoolantLevel</th>
+            <th>adBlueLevel</th>
+            <th>tyres</th>
+            <th>wheels</th>
+            <th>bodyPanels</th>
+            <th>horns</th>
+            <th>fuelOilLeaks</th>
+            <th>speedometer</th>
+            <th>exhaustAndSmoke</th>
+            <th>battery</th>
+            <th>seatBelts</th>
+            <th>doorCondition</th>
+            <th>instrumentPanel</th>
+            <th>windscreenCondition</th>
+            <th>wipersAndWashers</th>
+            <th>fireExtinguisher</th>
+            <th>dashCam</th>
+            <th>wheelChangingKit</th>
+            <th>spareWheel</th>
+            <th>warningTriangle</th>
+            <th>firstAidKit</th>
+            <th>drivingLicense</th>
+            <th>alcoholOrDrugs</th>
+            <th>contactDetails</th>
+            <th>commentsLightsIndicators</th>
+            <th>commentsReflectorsMarkers</th>
+            <th>commentsMirrors</th>
+            <th>commentsOilCoolantLevel</th>
+            <th>commentsAdBlueLevel</th>
+            <th>commentsTyres</th>
+            <th>commentsWheels</th>
+            <th>commentsBodyPanels</th>
+            <th>commentsHorn</th>
+            <th>commentsFuelOilLeaks</th>
+            <th>commentsSpeedometer</th>
+            <th>commentsExhaustAndSmoke</th>
+            <th>commentsBattery</th>
+            <th>commentsSeatBelts</th>
+            <th>commentsDoorsCondition</th>
+            <th>commentsWipersAndWashers</th>
+            <th>commentsInstrumentPanel</th>
+            <th>commentsWindscreenCondition</th>
+            <th>commentsFireExtinguisher</th>
+            <th>commentsDashcam</th>
+            <th>commentsWheelChangingKit</th>
+            <th>commentsSpareWheel</th>
+            <th>commentsWarningTriangle</th>
+            <th>commentsFirstAidKit</th>
+            <th>commentsDrivingLicense</th>
+            <th>commentsAlcoholOrDrugs</th>
+            <th>checkDate</th>
+
+            @*<th>Details</th>*@
+
+
+
+
+
+        </tr>
+    </thead>
+
+    @*@foreach (var item in Model)
+    {*@
+<tr>
+    <td>@Model.Id</td>
+    <td>@Model.depot</td>
+    <td>@Model.vehicleRegistration</td>
+    <td>@Model.vehicleMake</td>
+    <td>@Model.mileage</td>
+    <td>@Model.driverFullname</td>
+    <td>@Model.lightsIndicators</td>
+    <td>@Model.reflectorMarkers</td>
+    <td>@Model.mirrors</td>
+    <td>@Model.OilCoolantLevel</td>
+    <td>@Model.adBlueLevel</td>
+    <td>@Model.tyres</td>
+    <td>@Model.wheels</td>
+    <td>@Model.bodyPanels</td>
+    <td>@Model.horns</td>
+    <td>@Model.fuelOilLeaks</td>
+    <td>@Model.speedometer</td>
+    <td>@Model.exhaustAndSmoke</td>
+    <td>@Model.battery</td>
+    <td>@Model.seatBelts</td>
+    <td>@Model.doorCondition</td>
+    <td>@Model.instrumentPanel</td>
+    <td>@Model.windscreenCondition</td>
+    <td>@Model.wipersAndWashers</td>
+    <td>@Model.fireExtinguisher</td>
+    <td>@Model.dashCam</td>
+    <td>@Model.wheelChangingKit</td>
+    <td>@Model.spareWheel</td>
+    <td>@Model.warningTriangle</td>
+    <td>@Model.firstAidKit</td>
+    <td>@Model.drivingLicense</td>
+    <td>@Model.alcoholOrDrugs</td>
+    <td>@Model.contactDetails</td>
+    <td>@Model.commentsLightsIndicators</td>
+    <td>@Model.commentsReflectorsMarkers</td>
+    <td>@Model.commentsMirrors</td>
+    <td>@Model.commentsOilCoolantLevel</td>
+    <td>@Model.commentsAdBlueLevel</td>
+    <td>@Model.commentsTyres</td>
+    <td>@Model.commentsWheels</td>
+    <td>@Model.commentsBodyPanels</td>
+    <td>@Model.commentsHorn</td>
+    <td>@Model.commentsFuelOilLeaks</td>
+    <td>@Model.commentsSpeedometer</td>
+    <td>@Model.commentsExhaustAndSmoke</td>
+    <td>@Model.commentsBattery</td>
+    <td>@Model.commentsSeatBelts</td>
+    <td>@Model.commentsDoorsCondition</td>
+    <td>@Model.commentsWipersAndWashers</td>
+    <td>@Model.commentsInstrumentPanel</td>
+    <td>@Model.commentsWindscreenCondition</td>
+    <td>@Model.commentsFireExtinguisher</td>
+    <td>@Model.commentsDashcam</td>
+    <td>@Model.commentsWheelChangingKit</td>
+    <td>@Model.commentsSpareWheel</td>
+    <td>@Model.commentsWarningTriangle</td>
+    <td>@Model.commentsFirstAidKit</td>
+    <td>@Model.commentsDrivingLicense</td>
+    <td>@Model.commentsAlcoholOrDrugs</td>
+    <td>@Model.checkDate</td>
+    @*<td>@Html.ActionLink("Details", "VehicleInspectionDetail", new { inspectionId = item.Id })</td>*@
+</tr>
+    @*}*@
+
+</table>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true
+        });
+    });
+</script>
+

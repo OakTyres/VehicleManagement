@@ -1,0 +1,48 @@
+﻿@model List<VehicleManagement.Models.UpcomingWarrantyModel>
+@{
+    ViewData["Title"] = "UpcomingWarranty";
+    var total = Model.Count;
+}
+
+<h1>@total vehicles are out of warranty</h1>
+
+<button id="downloadButton" class="btn-link" style="align-self: start" onclick="exportTableToExcel('dTable', filename = 'report')">Download</button>
+<table class="table" width="100%" id="dTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>Depot</th>
+            <th>Vehicle Reg</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>End Date</th>
+            <th>Current Mileage</th>
+            <th>Discontinued</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+        @foreach (var subItem in Model)
+        {
+        <tr>
+            <td>@subItem.DepotName</td>
+            <td>@subItem.VanRegistration.ToString()</td>
+            <td>@subItem.Make</td>
+            <td>@subItem.Model</td>
+            <td>@subItem.EndDate.ToString("yyyy-MM-dd")</td>
+            <td>@subItem.CurrentMileage</td>
+            <td>@subItem.Discontinued</td>
+
+            <td><button type="button" class="btn btn-warning" onclick="loadWarrantyUpdaterModal('@subItem.VanRegistration.ToString()')">Confirm</button></td>
+        </tr>
+        }
+    
+</table>
+<div id="warrantyUpdater">
+</div>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true
+        });
+    });
+</script>
+

@@ -1,0 +1,22 @@
+﻿@model VehicleManagement.Models.hireModels.AddHireVehicleModel
+
+@{
+    ViewData["Title"] = "AddHireVehicle";
+}
+
+<h4>Add Hire Vehicle</h4>
+<hr />
+<div id="loadedForm">
+</div>
+<div class="container" id="buttonsHeader">
+    <label class="control-label">Who is this van for - Depot or Person?</label> <br />
+    <button id="personButton" class="btn btn-success" type="button" value="Person" onclick="load(1)">Person</button> 
+    <br />
+    <br />
+    <button id="depotButton" class="btn btn-success" type="button" value="Depot" onclick="load(2)">Depot</button>
+</div>
+<hr />
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

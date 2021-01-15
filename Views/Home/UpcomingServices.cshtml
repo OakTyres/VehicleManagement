@@ -1,0 +1,71 @@
+﻿@model List<VehicleManagement.Models.UpcomingEventsModel>
+@{
+    ViewData["Title"] = "UpcomingServices";
+    var dueCount = 0;
+    var overDueCount = 0;
+    foreach (var veh in Model)
+    {
+        if (veh.DueText.Contains("overdue"))
+        {
+            overDueCount += 1;
+        }
+        else
+        {
+            dueCount += 1;
+        }
+    }
+
+}
+
+<h1>@dueCount vehicles services are due</h1>
+<h2 style="color: crimson">@overDueCount vehicles are overdue...</h2>
+<br />
+<button id="downloadButton" class="btn-link" style="align-self: start" onclick="exportTableToExcel('dTable', filename = 'report')">Download</button>
+<table class="table" width="100%" id="dTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>Depot</th>
+            <th>Vehicle Reg</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Miles to service</th>
+            <th>Service Est.</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model.GroupBy(x => x.DepotName))
+    {
+        @foreach (var subItem in item)
+        {
+<tr>
+    <td>@subItem.DepotName</td>
+    <td>@subItem.VanRegistration.ToString()</td>
+    <td>@subItem.Make</td>
+    <td>@subItem.Model</td>
+    <td>@subItem.Due</td>
+    @if (subItem.DueText.Contains("days") && !subItem.DueText.Contains("overdue"))
+    {
+        <td style="color: coral"> @subItem.DueText</td>
+    }
+    else if (subItem.DueText.Contains("overdue"))
+    {
+        <td style="color: crimson"> @subItem.DueText</td>
+    }
+    else
+    {
+        <td>@subItem.DueText</td>
+    }
+    <td><button type="button" class="btn btn-warning" onclick="loadServiceUpdaterModal('@subItem.VanRegistration.ToString()')">Update</button></td>
+</tr>
+        }
+    }
+</table>
+<div id="serviceUpdater">
+</div>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true
+        });
+    });
+</script>

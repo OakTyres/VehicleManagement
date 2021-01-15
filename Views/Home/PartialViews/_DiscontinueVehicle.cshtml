@@ -1,0 +1,44 @@
+﻿@model List<VehicleManagement.Models.DiscontinueVehicleModel>
+@{
+    ViewData["Title"] = "UpcomingMOT";
+}
+
+<h1>Showing @Model.Count.ToString() vehicles</h1>
+<table class="table" width="100%" id="dTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>Depot</th>
+            <th>Vehicle Reg</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>In Warranty</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var subItem in Model)
+        {
+            <tr>
+                <td>@subItem.DepotName</td>
+                <td>@subItem.VanRegistration.ToString()</td>
+                <td>@subItem.Make</td>
+                <td>@subItem.Model</td>
+                <td>@subItem.InWarranty</td>
+                <td>@subItem.StartDate.ToString().Replace("/", "-").Substring(0, 10)</td>
+                <td>@subItem.EndDate.ToString().Replace("/", "-").Substring(0, 10)</td>
+                <td><button type="button" class="btn btn-warning" onclick="loadDeductionConfirmation('@subItem.VanRegistration.ToString()')">Discontinue</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="discontinue">
+</div>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true
+        });
+    });
+</script>

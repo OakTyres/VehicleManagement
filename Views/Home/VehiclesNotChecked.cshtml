@@ -1,0 +1,54 @@
+﻿@model List<VehicleManagement.Models.VehicleMissingCheckModel>
+@{
+    ViewData["Title"] = "VehiclesNotChecked";
+    string depot = "";
+    foreach(var i in Model)
+    {
+        int caseSwitch = i.Depot;
+
+        switch (caseSwitch)
+        {
+            case 1:
+                depot = "Haydock";
+                break;
+            case 3:
+                depot = "Leeds";
+                break;
+            case 7:
+                depot = "Trafford";
+                break;
+            case 9:
+                depot = "Tyne";
+                break;
+
+        }
+    }
+    }
+
+<h1>Vehicles Not Checked in @depot</h1>
+
+<table class="table" width="100%" id="dTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>Vehicle Reg</th>
+            <th>Assigned Driver</th>
+            <th>Last Checked On</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>@item.VanRegistration</td>
+    <td>@item.UsualDriver</td>
+    <td>@item.LastChecked</td>
+</tr>
+    }
+</table>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true,
+            lengthMenu: [20, 50, 100, 150, 200]
+        });
+    });
+</script>

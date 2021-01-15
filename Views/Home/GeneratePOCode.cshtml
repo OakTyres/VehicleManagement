@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "GeneratePOCode";
+
+}
+
+<h1>Generate PO Number</h1>
+
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label class="control-label">Select a cost centre</label>
+                <select id="costCentre" class="form-control">
+                </select>
+            </div>
+        </div>
+    </div>
+    <button onclick="loadPONumber()" class="btn-sm btn-primary">Generate Code</button>
+<div id="poNumber">
+</div>
+<script>
+    
+    $(document).ready(function () {
+        $("#costCentre").select2({
+            placeholder: "Choose a cost centre",
+            allowClear: true,
+            ajax: {
+                url: '/Home/GetCostCentreCodes',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+        });
+    });
+    function loadPONumber() {
+        var costCentre = $("#costCentre").val();
+        costCentre = costCentre.trim();
+        $.get("/Home/LoadPONumber", { 'Id': costCentre }, function (html) {
+            var $div = $('<div class="text-center"></div>');
+            $div.html(html);
+            $("#poNumber").append($div);
+        });
+    }
+</script>

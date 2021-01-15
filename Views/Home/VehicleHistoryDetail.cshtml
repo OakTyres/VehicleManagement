@@ -1,0 +1,40 @@
+﻿@model List<VehicleHistoryDetailModel>
+@{
+    ViewData["Title"] = "VehicleHistoryDetail";
+}
+
+<h1>Vehicle History Details</h1>
+<br />
+<table class="table" width="100%" id="dTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>Depot</th>
+            <th>Vehicle Reg</th>
+            <th>Reason</th>
+            <th>Action Date</th>
+            <th>Comments</th>
+            <th>Fleet or Rent</th>
+            <th>User</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+<tr>
+            <td>@item.Depot</td>
+            <td>@item.VehicleRegistration.ToString()</td>
+            <td>@item.Reason</td>
+            <td>@item.ActionDate</td>
+            <td>@item.AdditionalComments</td>
+            <td>@item.FleetOrRent</td>
+            <td>@item.ActionUser</td>
+</tr>
+    }
+</table>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true
+        });
+    });
+</script>
+

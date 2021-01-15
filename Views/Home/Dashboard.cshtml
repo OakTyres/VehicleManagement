@@ -1,0 +1,255 @@
+﻿@model List<VehicleManagement.Models.VehicleMaintenanceMeticsModel>
+@{
+    ViewData["Title"] = "VehicleMaintenance";
+    var servicesDue = 0;
+    var servicesOverdue = 0;
+    var motDue = 0;
+    var motOverDue = 0;
+    var taxDue = 0;
+    var taxOverdue = 0;
+    var activeVehicles = 0;
+    var inactiveVehicles = 0;
+    var soldThisMonth = 0;
+    var sornedThisMonth = 0;
+    var writtenOffThisMonth = 0;
+    var outForRepair = 0;
+    var outOfWarranty = 0;
+    var totalOnHire = 0;
+    var haydockChecks = 0;
+    var leedsChecks = 0;
+    var traffordChecks = 0;
+    var tyneChecks = 0;
+    var haydockNotChecked = 0;
+    var leedsNotChecked = 0;
+    var traffordNotChecked = 0;
+    var tyneNotChecked = 0;
+    var allChecks = 0;
+    var allNoneChecks = 0;
+    var percentChecked = 0.0;
+    var percentNotChecked = 0.0;
+
+    foreach (var item in Model)
+    {
+        servicesDue = item.ServicesDue;
+        servicesOverdue = item.ServicesOverdue;
+        motDue = item.MOTDue;
+        motOverDue = item.MOTOverdue;
+        taxDue = item.TaxDue;
+        taxOverdue = item.TaxOverdue;
+        activeVehicles = item.ActiveVehicles;
+        inactiveVehicles = item.InactiveVehicles;
+        soldThisMonth = item.SoldThisMonth;
+        sornedThisMonth = item.SornedThisMonth;
+        writtenOffThisMonth = item.WriteOffThisMonth;
+        outForRepair = item.OutForRepair;
+        outOfWarranty = item.OutOfWarranty;
+        totalOnHire = item.TotalOnHire;
+         haydockChecks = item.HaydockChecks;
+         leedsChecks = item.LeedsChecks;
+         traffordChecks = item.TraffordChecks;
+         tyneChecks = item.TyneChecks;
+         haydockNotChecked = item.HaydockNotChecked;
+         leedsNotChecked = item.LeedsNotChecked;
+         traffordNotChecked = item.TraffordNotChecked;
+         tyneNotChecked = item.TyneNotChecked;
+         allChecks = item.AllChecks;
+         allNoneChecks = item.AllNoneChecks;
+         percentChecked = item.PercentChecked;
+         percentNotChecked = item.PercentNotChecked;
+    }
+}
+
+<div class="text-center container-fluid">
+
+    @*<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4" style="color:blue">Dashboard</h1>
+    </div>*@
+    <div class="container">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4   shadow-sm ">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Services</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Services Due</li>
+                        <li><h5 style="color: forestgreen; font-weight: bold">@servicesDue</h5></li>
+                        <li>Overdue</li>
+                        <li><h5 style="color: red; font-weight: bold">@servicesOverdue</h5></li>
+                    </ul>
+                    <div style="width:100%">
+                        <a href="/Home/UpcomingServices" class="btn btn-primary btn-sm btn-block" role="button">View/Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">MOTs</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>MOTs Due</li>
+                        <li><h5 style="color: forestgreen; font-weight: bold">@motDue</h5></li>
+                        <li>Overdue</li>
+                        <li><h5 style="color: red; font-weight: bold">@motOverDue</h5></li>
+                    </ul>
+                    <div style="width:100%">
+                        <a href="/Home/UpcomingMOT" class="btn btn-primary btn-sm btn-block" role="button">View/Manage</a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Tax</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Tax Due</li>
+                        <li><h5 style="color: forestgreen; font-weight: bold">@taxDue</h5></li>
+                        <li>Overdue</li>
+                        <li><h5 style="color: red; font-weight: bold">@taxOverdue</h5></li>
+                    </ul>
+                    <div style="width:100%">
+                        <a href="/Home/UpcomingTax" class="btn btn-primary btn-sm btn-block" role="button">View/Manage</a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Overview</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Active Vans</li>
+                        <li><h5 style="color: forestgreen; font-weight: bold">@activeVehicles</h5></li>
+                        <li>Inactive Vehicles</li>
+                        <li><h5 style="color: red; font-weight: bold">@inactiveVehicles</h5></li>
+                    </ul>
+                    <div style="width:100%">
+                        @*<a href="/Home/UpcomingTax" class="btn btn-primary btn-lg btn-block" role="button">View/Manage</a>*@
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Health</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Out for Repair</li>
+                        <li><h5 style="color: forestgreen; font-weight: bold">@outForRepair</h5></li>
+                        <li>Out of warranty</li>
+                        <li><h5 style="color: red; font-weight: bold">@outOfWarranty</h5></li>
+                    </ul>
+                    <div style="width:100%">
+                        @*<a href="/Home/UpcomingWarranty" class="btn btn-primary btn-lg btn-block" role="button">View/Manage</a>*@
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">This Month</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Sorned</li>
+                        <li><h5 style="color: forestgreen; font-weight: bold">@sornedThisMonth</h5></li>
+                        <li>Written off</li>
+                        <li><h5 style="color: red; font-weight: bold">@writtenOffThisMonth</h5></li>
+                    </ul>
+                    <div style="width:100%">
+                        @*<a href="/Home/UpcomingTax" class="btn btn-primary btn-lg btn-block" role="button">View/Manage</a>*@
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Hire</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Active</li>
+                        <li><h5 style="color: forestgreen; font-weight: bold">@totalOnHire</h5></li>
+
+                    </ul>
+                    <div style="width:100%">
+                        @*<a href="/Home/UpcomingTax" class="btn btn-primary btn-lg btn-block" role="button">View/Manage</a>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Haydock</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li><h5><a href="/Home/VehicleDefectsDetail?depot=1" style="color: forestgreen; font-weight: bold">@haydockChecks checked</a></h5></li>
+                        <li><h5><a href="/Home/VehiclesNotChecked?depot=1" style="color: red; font-weight: bold">@haydockNotChecked not checked</a></h5></li> 
+                        
+                    </ul>
+                    @*<div style="width:100%">
+                        <a href="/Home/VehicleDefectsDetail?depot=1" class="btn btn-primary btn-sm btn-block" role="button">View</a>
+                    </div>*@
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Trafford</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li><h5><a href="/Home/VehicleDefectsDetail?depot=7" style="color: forestgreen; font-weight: bold">@traffordChecks checked</a></h5></li>
+                        <li><h5><a href="/Home/VehiclesNotChecked?depot=7" style="color: red; font-weight: bold">@traffordNotChecked not checked</a></h5></li>
+                    </ul>
+                    @*<div style="width:100%">
+                        <a href="/Home/VehicleDefectsDetail?depot=7" class="btn btn-primary btn-sm btn-block" role="button">View</a>
+                    </div>*@
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Leeds</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li><h5><a href="/Home/VehicleDefectsDetail?depot=3" style="color: forestgreen; font-weight: bold">@leedsChecks checked</a></h5></li>
+                        <li><h5><a href="/Home/VehiclesNotChecked?depot=3" style="color: red; font-weight: bold">@leedsNotChecked not checked</a></h5></li>
+                    </ul>
+                    @*<div style="width:100%">
+                        <a href="/Home/VehicleDefectsDetail?depot=3" class="btn btn-primary btn-sm btn-block" role="button">View</a>
+                    </div>*@
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Tyne</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li><h5><a href="/Home/VehicleDefectsDetail?depot=9" style="color: forestgreen; font-weight: bold">@tyneChecks checked</a></h5></li>
+                        <li><h5><a href="/Home/VehiclesNotChecked?depot=9" style="color: red; font-weight: bold">@tyneNotChecked not checked</a></h5></li>
+                    </ul>
+                    @*<div style="width:100%">
+                        <a href="/Home/VehicleDefectsDetail?depot=9" class="btn btn-primary btn-sm btn-block" role="button">View</a>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
