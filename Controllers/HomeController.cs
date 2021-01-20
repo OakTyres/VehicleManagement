@@ -119,7 +119,7 @@ namespace VehicleManagement.Controllers
             else
             {
 
-                var insertSql = @"INSERT INTO loadingApp.dbo.vehiclesHire (oakPONumber,hiredFor,vehicleRegistration,make,model,hireCompany,hireProvider,hiredFrom,reasonForHire,dateAddedToMid,payloadCapacity,vehicleReplacing) VALUES
+                var insertSql = @"INSERT INTO loadingApp.dbo.vehiclesHire (oakPONumber,hiredFor,vehicleRegistration,make,model,hireCompany,hireProvider,hiredFrom,reasonForHire,dateAddedToMid,payloadCapacity,vehicleReplacing,isDiscontinued) VALUES
                              ('" + hireVehicle.OakPONumber +
                                  "','" + hireVehicle.HiredFor +
                                  "','" + hireVehicle.VehicleRegistration +
@@ -132,7 +132,7 @@ namespace VehicleManagement.Controllers
                                  "','" + hireVehicle.DateAddedToMid.ToString("yyyy-MM-dd HH:mm:ss") +
                                  "'," + hireVehicle.PayLoadCapacity +
                                  ",'" + hireVehicle.VehicleReplacing +
-                                 "')";
+                                 "',0)";
 
                 var checkDb = @"SELECT vehicleRegistration FROM loadingApp.dbo.vehiclesHire WHERE vehicleRegistration = '" + hireVehicle.VehicleRegistration + "'";
                 var addHistory = @"INSERT INTO loadingApp.dbo.vehicleHistory (vehicleRegistration, actionReason, actionDate, additionalComments, actionUser) 
