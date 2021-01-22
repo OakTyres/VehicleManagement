@@ -8,6 +8,7 @@ namespace VehicleManagement.Models
     public class VehicleDefectsDetailModel
     {
         public string Depot { get; set; }
+        public DateTime CheckDate { get; set; }
         public string VanRegistration { get; set; }
         public string UsualDriver { get; set; }
         public string CurrentDriver { get; set; }

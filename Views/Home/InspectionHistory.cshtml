@@ -21,10 +21,8 @@
             <th>Inspection Date</th>
             <th>mileage</th>
             <th>Driver Fullname</th>
+            <th>Total Defects</th>
             <th>Details</th>
-
-
-
 
 
         </tr>
@@ -39,7 +37,9 @@
                 <td>@item.checkDate</td>
                 <td>@item.mileage</td>
                 <td>@item.driverFullname</td>
-                <td>@Html.ActionLink("Details", "VehicleInspectionDetail", new { InspectionItem = item.Id})</td>
+                <td>@item.totalDefects</td>
+                @*<td>@Html.ActionLink("Details", "VehicleInspectionDetail", new { InspectionItem = item.Id})</td>*@
+                <td><button type="button" class="btn btn-sm btn-warning" onclick="loadDefectsDetail('@item.vehicleRegistration','@item.Id')">See defects</button></td>
             </tr>
         }
 
@@ -50,4 +50,7 @@
             "sortable": true
         });
     });
+    function loadDefectsDetail(reg, id) {
+        window.location = '/Home/IndividualVehicleInspections?reg=' + reg + '&checkId=' + id;
+    }
 </script>

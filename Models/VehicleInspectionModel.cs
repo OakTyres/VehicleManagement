@@ -68,6 +68,7 @@ namespace VehicleManagement.Models
         public string commentsAlcoholOrDrugs { get; set; }
         public string checkDate { get; set; }
         public byte[] Signature { get; set; }
+        public int totalDefects { get; set; }
     }
 
     public class VehicleInspectionModel
@@ -79,5 +80,6 @@ namespace VehicleManagement.Models
         public int mileage { get; set; }
         public string driverFullname { get; set; }
         public string checkDate { get; set; }
+        public int totalDefects { get; set; }
     }
 }

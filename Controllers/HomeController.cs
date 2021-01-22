@@ -915,6 +915,7 @@ namespace VehicleManagement.Controllers
         public IActionResult IndividualVehicleDefects(string reg)
         {
             string sql = @"SELECT
+                                    checkDate,
                                     vehicles.vanRegistration,
 									vehicles.driver AS usualDriver,
 									driverFullname AS currentDriver,
@@ -1000,6 +1001,97 @@ namespace VehicleManagement.Controllers
 	           //                     END) 
             var individualInspection = SQLDataAccess.LoadData<VehicleDefectsDetailModel>(sql).First();
             return View(individualInspection);
+        }
+
+        public IActionResult IndividualVehicleInspections(string reg, int checkId)
+        {
+            string sql = @"SELECT
+                                    checkDate,
+                                    vehicles.vanRegistration,
+									vehicles.driver AS usualDriver,
+									driverFullname AS currentDriver,
+									commentsLightsIndicators,
+									commentsReflectorsMarkers,
+									commentsMirrors,
+									commentsOilCoolantLevel,
+									commentsAdBlueLevel,
+									commentsTyres,
+									commentsWheels,
+									commentsBodyPanels,
+									commentsHorn,
+									commentsFuelOilLeaks,
+									commentsSpeedometer,
+									commentsExhaustAndSmoke,
+									commentsBattery,
+									commentsSeatBelts,
+									commentsDoorsCondition,
+									commentsWipersAndWashers,
+									commentsInstrumentPanel,
+									commentsWindscreenCondition,
+									commentsFireExtinguisher,
+									commentsDashcam,
+									commentsWheelChangingKit,
+									commentsSpareWheel,
+									commentsWarningTriangle,
+									commentsFirstAidKit,
+									commentsDrivingLicense,
+									commentsAlcoholOrDrugs,
+									[nsfDepth],
+									[osfDepth],
+									[nsrDepth],
+									[osrDepth],
+									[spareDepth]
+								FROM vehicles
+								LEFT JOIN (
+									SELECT DISTINCT
+										*
+									FROM vanInspection
+									WHERE Id = " + checkId +  @"
+								) inspection ON inspection.vehicleRegistration = vehicles.vanRegistration
+								WHERE isDiscontinued = 0 
+                                AND inspection.vehicleRegistration IS NOT NULL
+								AND (
+									commentsLightsIndicators <> '' OR
+									commentsReflectorsMarkers <> '' OR
+									commentsMirrors <> '' OR
+									commentsOilCoolantLevel <> '' OR
+									commentsAdBlueLevel <> '' OR
+									commentsTyres <> '' OR
+									commentsWheels <> '' OR
+									commentsBodyPanels <> '' OR
+									commentsHorn <> '' OR
+									commentsFuelOilLeaks <> '' OR
+									commentsSpeedometer <> '' OR
+									commentsExhaustAndSmoke <> '' OR
+									commentsBattery <> '' OR
+									commentsSeatBelts <> '' OR
+									commentsDoorsCondition <> '' OR
+									commentsWipersAndWashers <> '' OR
+									commentsInstrumentPanel <> '' OR
+									commentsWindscreenCondition <> '' OR
+									commentsFireExtinguisher <> '' OR
+									commentsDashcam <> '' OR
+									commentsWheelChangingKit <> '' OR
+									commentsSpareWheel <> '' OR
+									commentsWarningTriangle <> '' OR
+									commentsFirstAidKit <> '' OR
+									commentsDrivingLicense <> '' OR
+									commentsAlcoholOrDrugs <> '' OR
+									[nsfDepth] <= 2.0 OR
+									[osfDepth] <= 2.0 OR
+									[nsrDepth] <= 2.0 OR
+									[osrDepth] <= 2.0 OR
+									[spareDepth] <= 2.0
+								)
+                               
+                                AND vehicles.vanRegistration= '" + reg + "'";
+            //AND (CASE WHEN vehicles.depot = 1 THEN 'Haydock'
+            //               WHEN vehicles.depot = 3 THEN 'Leeds'
+            //               WHEN vehicles.depot = 7 THEN 'Trafford'
+            //               WHEN vehicles.depot = 9 THEN 'Tyne & Wear'
+            //                     END) 
+            var individualInspection = SQLDataAccess.LoadData<VehicleDefectsDetailModel>(sql).First();
+            return View("/Views/Home/IndividualVehicleDefects.cshtml", individualInspection);
         }
 
         public IActionResult VehiclesNotChecked(int depot)
@@ -1573,10 +1665,11 @@ namespace VehicleManagement.Controllers
         public IActionResult InspectionHistory()
         {
             string sql = @"SELECT 
-              [Id]
+             [Id]
+			,totalDefects
             ,[depot]
             ,[vehicleRegistration]
-            ,[vehicleMake]
+            ,vehicleMakes.make as [vehicleMake]
             ,[mileage]
             ,[driverFullname]
             ,[lightsIndicators]
@@ -1635,6 +1728,52 @@ namespace VehicleManagement.Controllers
             ,[checkDate]
             ,[Signature]
             FROM [loadingApp].[dbo].[vanInspection]
+			LEFT JOIN (
+				SELECT
+					vanRegistration,
+					make
+				FROM loadingApp.dbo.vehicles
+				UNION ALL
+				SELECT
+					vehicleRegistration,
+					make
+				FROM loadingApp.dbo.vehiclesHire
+			) vehicleMakes ON vehicleMakes.vanRegistration = vanInspection.vehicleRegistration
+			LEFT JOIN (
+				SELECT
+					Id as countId,
+				SUM(CASE WHEN commentsLightsIndicators <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsReflectorsMarkers <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsMirrors <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsOilCoolantLevel <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsAdBlueLevel <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsTyres <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsWheels <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsBodyPanels <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsHorn <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsFuelOilLeaks <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsSpeedometer <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsExhaustAndSmoke <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsBattery <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsSeatBelts <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsDoorsCondition <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsWipersAndWashers <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsInstrumentPanel <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsWindscreenCondition <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsFireExtinguisher <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsDashcam <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsWheelChangingKit <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsSpareWheel <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsWarningTriangle <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsFirstAidKit <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsDrivingLicense <> '' THEN 1 ELSE 0 END +
+					CASE WHEN commentsAlcoholOrDrugs <> '' THEN 1 ELSE 0 END + 
+					CASE WHEN ([nsfDepth] <= 2.0 OR [osfDepth] <= 2.0 OR [nsrDepth] <= 2.0 OR [osrDepth] <= 2.0 OR [spareDepth] <= 2.0) THEN 1 ELSE 0 END
+				) AS totalDefects
+				FROM loadingApp.dbo.vanInspection
+				GROUP BY Id
+			) inspectionTotals ON inspectionTotals.countId = vanInspection.Id
+
             WHERE CONVERT(DATE, checkDate) >= DATEADD(DD,-7,CONVERT(DATE,GETDATE()))";
 
             //string sql = @"SELECT 
