@@ -134,6 +134,8 @@ namespace VehicleManagement.Controllers
                                  ",'" + hireVehicle.VehicleReplacing +
                                  "',0)";
 
+            
+
                 var checkDb = @"SELECT vehicleRegistration FROM loadingApp.dbo.vehiclesHire WHERE vehicleRegistration = '" + hireVehicle.VehicleRegistration + "'";
                 var addHistory = @"INSERT INTO loadingApp.dbo.vehicleHistory (vehicleRegistration, actionReason, actionDate, additionalComments, actionUser) 
                                 VALUES ('" + hireVehicle.VehicleRegistration + "',14,'" + currentDate + "','" + "No Comments" + "','" + user + "')";
@@ -823,90 +825,110 @@ namespace VehicleManagement.Controllers
         public IActionResult VehicleDefectsDetail(int depot)
         {
             string sql = @"SELECT
-									CASE WHEN vehicles.depot = 1 THEN 'Haydock'
-		                             WHEN vehicles.depot = 3 THEN 'Leeds'
-		                             WHEN vehicles.depot = 7 THEN 'Trafford'
-		                             WHEN vehicles.depot = 9 THEN 'Tyne & Wear'
-	                                END AS depot,
-									vehicles.vanRegistration,
-									vehicles.driver AS usualDriver,
-									driverFullname AS currentDriver,
-									SUM(
-										CASE WHEN commentsLightsIndicators <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsReflectorsMarkers <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsMirrors <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsOilCoolantLevel <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsAdBlueLevel <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsTyres <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsWheels <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsBodyPanels <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsHorn <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsFuelOilLeaks <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsSpeedometer <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsExhaustAndSmoke <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsBattery <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsSeatBelts <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsDoorsCondition <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsWipersAndWashers <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsInstrumentPanel <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsWindscreenCondition <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsFireExtinguisher <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsDashcam <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsWheelChangingKit <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsSpareWheel <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsWarningTriangle <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsFirstAidKit <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsDrivingLicense <> '' THEN 1 ELSE 0 END +
-										CASE WHEN commentsAlcoholOrDrugs <> '' THEN 1 ELSE 0 END + 
-										CASE WHEN ([nsfDepth] <= 2.0 OR [osfDepth] <= 2.0 OR [nsrDepth] <= 2.0 OR [osrDepth] <= 2.0 OR [spareDepth] <= 2.0) THEN 1 ELSE 0 END
-									) AS totalDefects
-								FROM vehicles
-								LEFT JOIN (
-									SELECT DISTINCT
-										*
-									FROM vanInspection
-									WHERE CONVERT(DATE,checkDate) = CONVERT(DATE,GETDATE())
-								) inspection ON inspection.vehicleRegistration = vehicles.vanRegistration
-								WHERE isDiscontinued = 0
-								AND inspection.vehicleRegistration IS NOT NULL
-								AND (
-									commentsLightsIndicators <> '' OR
-									commentsReflectorsMarkers <> '' OR
-									commentsMirrors <> '' OR
-									commentsOilCoolantLevel <> '' OR
-									commentsAdBlueLevel <> '' OR
-									commentsTyres <> '' OR
-									commentsWheels <> '' OR
-									commentsBodyPanels <> '' OR
-									commentsHorn <> '' OR
-									commentsFuelOilLeaks <> '' OR
-									commentsSpeedometer <> '' OR
-									commentsExhaustAndSmoke <> '' OR
-									commentsBattery <> '' OR
-									commentsSeatBelts <> '' OR
-									commentsDoorsCondition <> '' OR
-									commentsWipersAndWashers <> '' OR
-									commentsInstrumentPanel <> '' OR
-									commentsWindscreenCondition <> '' OR
-									commentsFireExtinguisher <> '' OR
-									commentsDashcam <> '' OR
-									commentsWheelChangingKit <> '' OR
-									commentsSpareWheel <> '' OR
-									commentsWarningTriangle <> '' OR
-									commentsFirstAidKit <> '' OR
-									commentsDrivingLicense <> '' OR
-									commentsAlcoholOrDrugs <> '' OR
-									[nsfDepth] <= 2.0 OR
-									[osfDepth] <= 2.0 OR
-									[nsrDepth] <= 2.0 OR
-									[osrDepth] <= 2.0 OR
-									[spareDepth] <= 2.0
-								)
-                                AND vehicles.depot = " + depot + @"
-								GROUP BY vehicles.depot,
-									vehicles.vanRegistration,
-									vehicles.driver,
-									driverFullname
+	                            vehicleList.depot,
+	                            vanRegistration,
+	                            usualDriver,
+	                            driverFullname,
+	                            SUM(
+		                            CASE WHEN commentsLightsIndicators <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsReflectorsMarkers <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsMirrors <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsOilCoolantLevel <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsAdBlueLevel <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsTyres <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsWheels <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsBodyPanels <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsHorn <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsFuelOilLeaks <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsSpeedometer <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsExhaustAndSmoke <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsBattery <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsSeatBelts <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsDoorsCondition <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsWipersAndWashers <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsInstrumentPanel <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsWindscreenCondition <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsFireExtinguisher <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsDashcam <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsWheelChangingKit <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsSpareWheel <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsWarningTriangle <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsFirstAidKit <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsDrivingLicense <> '' THEN 1 ELSE 0 END +
+		                            CASE WHEN commentsAlcoholOrDrugs <> '' THEN 1 ELSE 0 END + 
+		                            CASE WHEN ([nsfDepth] <= 2.0 OR [osfDepth] <= 2.0 OR [nsrDepth] <= 2.0 OR [osrDepth] <= 2.0 OR [spareDepth] <= 2.0) THEN 1 ELSE 0 END
+                            ) AS totalDefects
+                            FROM (
+								                            SELECT
+									                            CASE WHEN vehicles.depot = 1 THEN 'Haydock'
+		                                                         WHEN vehicles.depot = 3 THEN 'Leeds'
+		                                                         WHEN vehicles.depot = 7 THEN 'Trafford'
+		                                                         WHEN vehicles.depot = 9 THEN 'Tyne & Wear'
+	                                                            END AS depot,
+									                            vehicles.depot AS depotNum,
+									                            vehicles.vanRegistration,
+									                            vehicles.driver AS usualDriver,
+									                            isDiscontinued
+								                            FROM vehicles
+								                            UNION ALL
+								                            SELECT
+									                            hiredFor AS depot,
+									                            CASE WHEN vehiclesHire.hiredFor = 'Haydock' THEN 1
+		                                                         WHEN vehiclesHire.hiredFor = 'Leeds' THEN 3
+		                                                         WHEN vehiclesHire.hiredFor = 'Trafford' THEN 7
+		                                                         WHEN vehiclesHire.hiredFor = 'Tyne' THEN 9
+	                                                            END AS depotNum,
+									                            vehicleRegistration,
+									                            '' AS usualDriver,
+									                            isDiscontinued
+								                            FROM vehiclesHire
+                            ) vehicleList
+                            LEFT JOIN (
+	                            SELECT DISTINCT
+		                            *
+	                            FROM vanInspection
+	                            WHERE CONVERT(DATE,checkDate) = CONVERT(DATE,GETDATE())
+                            ) inspection ON inspection.vehicleRegistration = vehicleList.vanRegistration
+                            WHERE isDiscontinued = 0
+                            AND inspection.vehicleRegistration IS NOT NULL
+                            AND (
+	                            commentsLightsIndicators <> '' OR
+	                            commentsReflectorsMarkers <> '' OR
+	                            commentsMirrors <> '' OR
+	                            commentsOilCoolantLevel <> '' OR
+	                            commentsAdBlueLevel <> '' OR
+	                            commentsTyres <> '' OR
+	                            commentsWheels <> '' OR
+	                            commentsBodyPanels <> '' OR
+	                            commentsHorn <> '' OR
+	                            commentsFuelOilLeaks <> '' OR
+	                            commentsSpeedometer <> '' OR
+	                            commentsExhaustAndSmoke <> '' OR
+	                            commentsBattery <> '' OR
+	                            commentsSeatBelts <> '' OR
+	                            commentsDoorsCondition <> '' OR
+	                            commentsWipersAndWashers <> '' OR
+	                            commentsInstrumentPanel <> '' OR
+	                            commentsWindscreenCondition <> '' OR
+	                            commentsFireExtinguisher <> '' OR
+	                            commentsDashcam <> '' OR
+	                            commentsWheelChangingKit <> '' OR
+	                            commentsSpareWheel <> '' OR
+	                            commentsWarningTriangle <> '' OR
+	                            commentsFirstAidKit <> '' OR
+	                            commentsDrivingLicense <> '' OR
+	                            commentsAlcoholOrDrugs <> '' OR
+	                            [nsfDepth] <= 2.0 OR
+	                            [osfDepth] <= 2.0 OR
+	                            [nsrDepth] <= 2.0 OR
+	                            [osrDepth] <= 2.0 OR
+	                            [spareDepth] <= 2.0
+                            )
+                            AND vehicleList.depotNum = " + depot + @"
+                            GROUP BY vehicleList.depot,
+	                            vehicleList.vanRegistration,
+	                            vehicleList.usualDriver,
+	                            driverFullname
                                 ";
             var inspectionDetail = SQLDataAccess.LoadData<VehicleDefectsDetailModel>(sql);
             return View(inspectionDetail);
@@ -917,7 +939,7 @@ namespace VehicleManagement.Controllers
             string sql = @"SELECT
                                     checkDate,
                                     vehicles.vanRegistration,
-									vehicles.driver AS usualDriver,
+									'' AS usualDriver,
 									driverFullname AS currentDriver,
 									commentsLightsIndicators,
 									commentsReflectorsMarkers,
@@ -950,15 +972,39 @@ namespace VehicleManagement.Controllers
 									[nsrDepth],
 									[osrDepth],
 									[spareDepth]
+								FROM (
+
+								 SELECT
+									CASE WHEN vehicles.depot = 1 THEN 'Haydock'
+		                                WHEN vehicles.depot = 3 THEN 'Leeds'
+		                                WHEN vehicles.depot = 7 THEN 'Trafford'
+		                                WHEN vehicles.depot = 9 THEN 'Tyne & Wear'
+	                                END AS depot,
+									vehicles.depot AS depotNum,
+									vehicles.vanRegistration,
+									vehicles.driver AS usualDriver,
+									isDiscontinued
 								FROM vehicles
+								UNION ALL
+								SELECT
+									hiredFor AS depot,
+									CASE WHEN vehiclesHire.hiredFor = 'Haydock' THEN 1
+		                                WHEN vehiclesHire.hiredFor = 'Leeds' THEN 3
+		                                WHEN vehiclesHire.hiredFor = 'Trafford' THEN 7
+		                                WHEN vehiclesHire.hiredFor = 'Tyne' THEN 9
+	                                END AS depotNum,
+									vehicleRegistration,
+									'' AS usualDriver,
+									isDiscontinued
+								FROM vehiclesHire
+								) vehicles
 								LEFT JOIN (
 									SELECT DISTINCT
 										*
 									FROM vanInspection
 									WHERE CONVERT(DATE,checkDate) = CONVERT(DATE,GETDATE())
 								) inspection ON inspection.vehicleRegistration = vehicles.vanRegistration
-								WHERE isDiscontinued = 0 
-                                AND inspection.vehicleRegistration IS NOT NULL
+								WHERE inspection.vehicleRegistration IS NOT NULL
 								AND (
 									commentsLightsIndicators <> '' OR
 									commentsReflectorsMarkers <> '' OR
@@ -1006,85 +1052,94 @@ namespace VehicleManagement.Controllers
         public IActionResult IndividualVehicleInspections(string reg, int checkId)
         {
             string sql = @"SELECT
-                                    checkDate,
-                                    vehicles.vanRegistration,
-									vehicles.driver AS usualDriver,
-									driverFullname AS currentDriver,
-									commentsLightsIndicators,
-									commentsReflectorsMarkers,
-									commentsMirrors,
-									commentsOilCoolantLevel,
-									commentsAdBlueLevel,
-									commentsTyres,
-									commentsWheels,
-									commentsBodyPanels,
-									commentsHorn,
-									commentsFuelOilLeaks,
-									commentsSpeedometer,
-									commentsExhaustAndSmoke,
-									commentsBattery,
-									commentsSeatBelts,
-									commentsDoorsCondition,
-									commentsWipersAndWashers,
-									commentsInstrumentPanel,
-									commentsWindscreenCondition,
-									commentsFireExtinguisher,
-									commentsDashcam,
-									commentsWheelChangingKit,
-									commentsSpareWheel,
-									commentsWarningTriangle,
-									commentsFirstAidKit,
-									commentsDrivingLicense,
-									commentsAlcoholOrDrugs,
-									[nsfDepth],
-									[osfDepth],
-									[nsrDepth],
-									[osrDepth],
-									[spareDepth]
-								FROM vehicles
-								LEFT JOIN (
-									SELECT DISTINCT
-										*
-									FROM vanInspection
-									WHERE Id = " + checkId +  @"
-								) inspection ON inspection.vehicleRegistration = vehicles.vanRegistration
-								WHERE isDiscontinued = 0 
-                                AND inspection.vehicleRegistration IS NOT NULL
-								AND (
-									commentsLightsIndicators <> '' OR
-									commentsReflectorsMarkers <> '' OR
-									commentsMirrors <> '' OR
-									commentsOilCoolantLevel <> '' OR
-									commentsAdBlueLevel <> '' OR
-									commentsTyres <> '' OR
-									commentsWheels <> '' OR
-									commentsBodyPanels <> '' OR
-									commentsHorn <> '' OR
-									commentsFuelOilLeaks <> '' OR
-									commentsSpeedometer <> '' OR
-									commentsExhaustAndSmoke <> '' OR
-									commentsBattery <> '' OR
-									commentsSeatBelts <> '' OR
-									commentsDoorsCondition <> '' OR
-									commentsWipersAndWashers <> '' OR
-									commentsInstrumentPanel <> '' OR
-									commentsWindscreenCondition <> '' OR
-									commentsFireExtinguisher <> '' OR
-									commentsDashcam <> '' OR
-									commentsWheelChangingKit <> '' OR
-									commentsSpareWheel <> '' OR
-									commentsWarningTriangle <> '' OR
-									commentsFirstAidKit <> '' OR
-									commentsDrivingLicense <> '' OR
-									commentsAlcoholOrDrugs <> '' OR
-									[nsfDepth] <= 2.0 OR
-									[osfDepth] <= 2.0 OR
-									[nsrDepth] <= 2.0 OR
-									[osrDepth] <= 2.0 OR
-									[spareDepth] <= 2.0
-								)
+	                            vanRegistration,
+	                            usualDriver,
+	                            driverFullname AS currentDriver,
+                                checkDate,
+	                            commentsLightsIndicators,
+	                            commentsReflectorsMarkers,
+	                            commentsMirrors,
+	                            commentsOilCoolantLevel,
+	                            commentsAdBlueLevel,
+	                            commentsTyres,
+	                            commentsWheels,
+	                            commentsBodyPanels,
+	                            commentsHorn,
+	                            commentsFuelOilLeaks,
+	                            commentsSpeedometer,
+	                            commentsExhaustAndSmoke,
+	                            commentsBattery,
+	                            commentsSeatBelts,
+	                            commentsDoorsCondition,
+	                            commentsWipersAndWashers,
+	                            commentsInstrumentPanel,
+	                            commentsWindscreenCondition,
+	                            commentsFireExtinguisher,
+	                            commentsDashcam,
+	                            commentsWheelChangingKit,
+	                            commentsSpareWheel,
+	                            commentsWarningTriangle,
+	                            commentsFirstAidKit,
+	                            commentsDrivingLicense,
+	                            commentsAlcoholOrDrugs,
+	                            [nsfDepth],
+	                            [osfDepth],
+	                            [nsrDepth],
+	                            [osrDepth],
+	                            [spareDepth]
+                            FROM (
+	                            SELECT
+		                            vehicles.vanRegistration,
+		                            vehicles.driver AS usualDriver
+	                            FROM vehicles
+	                            UNION ALL
+	                            SELECT
+		                            vehiclesHire.vehicleRegistration,
+		                            '' AS usualDriver
+	                            FROM vehiclesHire
+                            ) vehiclesList
+                            LEFT JOIN (
+	                            SELECT DISTINCT
+		                            *
+	                            FROM vanInspection
+	                            WHERE Id = " + checkId + @"
+                            ) inspection ON inspection.vehicleRegistration = vehiclesList.vanRegistration
+                            WHERE inspection.vehicleRegistration IS NOT NULL
+                            AND (
+	                            commentsLightsIndicators <> '' OR
+	                            commentsReflectorsMarkers <> '' OR
+	                            commentsMirrors <> '' OR
+	                            commentsOilCoolantLevel <> '' OR
+	                            commentsAdBlueLevel <> '' OR
+	                            commentsTyres <> '' OR
+	                            commentsWheels <> '' OR
+	                            commentsBodyPanels <> '' OR
+	                            commentsHorn <> '' OR
+	                            commentsFuelOilLeaks <> '' OR
+	                            commentsSpeedometer <> '' OR
+	                            commentsExhaustAndSmoke <> '' OR
+	                            commentsBattery <> '' OR
+	                            commentsSeatBelts <> '' OR
+	                            commentsDoorsCondition <> '' OR
+	                            commentsWipersAndWashers <> '' OR
+	                            commentsInstrumentPanel <> '' OR
+	                            commentsWindscreenCondition <> '' OR
+	                            commentsFireExtinguisher <> '' OR
+	                            commentsDashcam <> '' OR
+	                            commentsWheelChangingKit <> '' OR
+	                            commentsSpareWheel <> '' OR
+	                            commentsWarningTriangle <> '' OR
+	                            commentsFirstAidKit <> '' OR
+	                            commentsDrivingLicense <> '' OR
+	                            commentsAlcoholOrDrugs <> '' OR
+	                            [nsfDepth] <= 2.0 OR
+	                            [osfDepth] <= 2.0 OR
+	                            [nsrDepth] <= 2.0 OR
+	                            [osrDepth] <= 2.0 OR
+	                            [spareDepth] <= 2.0
+                            )
                                
-                                AND vehicles.vanRegistration= '" + reg + "'";
+                            AND vehiclesList.vanRegistration= '" + reg + "'";
             //AND (CASE WHEN vehicles.depot = 1 THEN 'Haydock'
             //               WHEN vehicles.depot = 3 THEN 'Leeds'
             //               WHEN vehicles.depot = 7 THEN 'Trafford'
@@ -1097,27 +1152,46 @@ namespace VehicleManagement.Controllers
         public IActionResult VehiclesNotChecked(int depot)
         {
             string sql = @"SELECT
-									vehicles.depot,
-									vehicles.vanRegistration,
-									vehicles.driver AS usualDriver,
-									CONVERT(DATE,lastChecked) AS lastChecked
-								FROM vehicles
-								LEFT JOIN (
-									SELECT DISTINCT
-										vehicleRegistration
-									FROM vanInspection
-									WHERE CONVERT(DATE,checkDate) = CONVERT(DATE,GETDATE())
-								) inspection ON inspection.vehicleRegistration = vehicles.vanRegistration
-								LEFT JOIN (
-									SELECT
-										vehicleRegistration,
-										MAX(checkDate) as lastChecked
-									FROM vanInspection
-									GROUP BY vehicleRegistration
-								) lastInspection ON lastInspection.vehicleRegistration = vehicles.vanRegistration
-								WHERE isDiscontinued = 0
-								AND inspection.vehicleRegistration IS NULL
-                                AND depot = " + depot;
+	                            depot,
+	                            vanRegistration,
+	                            CONVERT(DATE,lastChecked) AS lastChecked
+                            FROM (
+
+	                            SELECT
+		                            vehicles.depot,
+		                            vehicles.vanRegistration,
+		                            vehicles.driver AS usualDriver,
+		                            isDiscontinued
+	                            FROM vehicles
+	                            UNION ALL
+	                            SELECT
+		                            CASE WHEN vehiclesHire.hiredFor = 'Haydock' THEN 1
+		                                WHEN vehiclesHire.hiredFor = 'Leeds' THEN 3
+		                                WHEN vehiclesHire.hiredFor = 'Trafford' THEN 7
+		                                WHEN vehiclesHire.hiredFor = 'Tyne' THEN 9
+	                                END AS depotNum,
+		                            vehiclesHire.vehicleRegistration,
+		                            '' as usualDriver,
+		                            isDiscontinued
+	                            FROM vehiclesHire
+                            ) vehiclesList
+
+	                            LEFT JOIN (
+		                            SELECT DISTINCT
+			                            vehicleRegistration
+		                            FROM vanInspection
+		                            WHERE CONVERT(DATE,checkDate) = CONVERT(DATE,GETDATE())
+	                            ) inspection ON inspection.vehicleRegistration = vehiclesList.vanRegistration
+	                            LEFT JOIN (
+		                            SELECT
+			                            vehicleRegistration,
+			                            MAX(checkDate) as lastChecked
+		                            FROM vanInspection
+		                            GROUP BY vehicleRegistration
+	                            ) lastInspection ON lastInspection.vehicleRegistration = vehiclesList.vanRegistration
+	                            WHERE isDiscontinued = 0
+	                            AND inspection.vehicleRegistration IS NULL
+	                            AND depot = " + depot;
 
             var notChecked = SQLDataAccess.LoadData<VehicleMissingCheckModel>(sql);
             return View(notChecked);

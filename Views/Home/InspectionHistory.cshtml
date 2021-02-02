@@ -11,7 +11,7 @@
 
 
 @*<h1>Vehicle Inspection</h1>*@
-
+<button id="downloadButton" class="btn-link" style="align-self: start" onclick="exportTableToExcel('dTable', filename = 'report')">Download</button>
 <table class="table" width="100%" id="dTable">
     <thead class="thead-dark">
         <tr>
@@ -28,26 +28,27 @@
         </tr>
     </thead>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.depot</td>
-                <td>@item.vehicleRegistration.ToString()</td>
-                <td>@item.vehicleMake</td>
-                <td>@item.checkDate</td>
-                <td>@item.mileage</td>
-                <td>@item.driverFullname</td>
-                <td>@item.totalDefects</td>
-                @*<td>@Html.ActionLink("Details", "VehicleInspectionDetail", new { InspectionItem = item.Id})</td>*@
-                <td><button type="button" class="btn btn-sm btn-warning" onclick="loadDefectsDetail('@item.vehicleRegistration','@item.Id')">See defects</button></td>
-            </tr>
-        }
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.depot</td>
+            <td>@item.vehicleRegistration.ToString()</td>
+            <td>@item.vehicleMake</td>
+            <td>@item.checkDate</td>
+            <td>@item.mileage</td>
+            <td>@item.driverFullname</td>
+            <td>@item.totalDefects</td>
+            @*<td>@Html.ActionLink("Details", "VehicleInspectionDetail", new { InspectionItem = item.Id})</td>*@
+            <td><button type="button" class="btn btn-sm btn-warning" onclick="loadDefectsDetail('@item.vehicleRegistration','@item.Id')">See defects</button></td>
+        </tr>
+    }
 
 </table>
 <script>
     $(document).ready(function () {
         $('#dTable').dataTable({
-            "sortable": true
+            "sortable": true,
+            lengthMenu: [5, 10, 20, 50, 100, 150, 200, 250, 300, 500, 1000]
         });
     });
     function loadDefectsDetail(reg, id) {
