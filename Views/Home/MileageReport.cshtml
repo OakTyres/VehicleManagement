@@ -1,0 +1,29 @@
+﻿@model IEnumerable<VehicleManagement.Models.MileageReportModel>
+
+<button id="downloadButton" class="btn-link" style="align-self: start" onclick="exportTableToExcel('dTable', filename = 'report')">Download</button>
+<table class="table" width="100%" id="dTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>Depot</th>
+            <th>Vehicle Reg</th>
+            <th>Last Mileage Date</th>
+            <th>Mileage</th>
+        </tr>
+    </thead>
+    @foreach (var subItem in Model)
+    {
+        <tr>
+            <td>@subItem.Depot</td>
+            <td>@subItem.VehicleRegistration</td>
+            <td>@subItem.CheckDate</td>
+            <td>@subItem.Mileage</td>
+        </tr>
+    }
+</table>
+<script>
+    $(document).ready(function () {
+        $('#dTable').dataTable({
+            "sortable": true
+        });
+    });
+</script>

@@ -1868,9 +1868,6 @@ namespace VehicleManagement.Controllers
 
         public IActionResult VehicleInspectionDetail(int InspectionItem)
         {
-
-
-
             string sql = @"SELECT 
               [Id]
             ,[depot]
@@ -1942,7 +1939,23 @@ namespace VehicleManagement.Controllers
             return View(inspection);
         }
 
-}
+        // fetch the latest mileage report from the inspections table by vehicle registration
+        public IActionResult MileageReport()
+        {
+            var mileageReportSQL = @"SELECT
+                                        UPPER(vanInspection.vehicleRegistration) AS vehicleRegistration,
+	                                    mileage,
+	                                    checkDate,
+	                                    vanInspection.depot
+                                    FROM loadingApp.dbo.vanInspection
+                                    INNER JOIN(SELECT vehicleRegistration, MAX(Id) AS Id FROM loadingApp.dbo.vanInspection GROUP BY vehicleRegistration) L ON L.Id = vanInspection.Id
+                                    INNER JOIN loadingApp.dbo.vehicles ON vehicles.vanRegistration = vanInspection.vehicleRegistration
+                                    ORDER BY 4,1";
+            var mileageReport = SQLDataAccess.LoadData<MileageReportModel>(mileageReportSQL);
+            return View(mileageReport);
+        }
+
+    }
 
     }
 //where checkDate >= DATEADD(WW,-1, GETDATE())
