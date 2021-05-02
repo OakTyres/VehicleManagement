@@ -28,11 +28,13 @@ using Microsoft.AspNetCore.Authentication;
 using VehicleManagement.Models.hireModels;
 using QRCoder;
 using System.Drawing;
+using VehicleManagement.Models.Authorisation;
 
 namespace VehicleManagement.Controllers
 {
     public class HomeController : Controller
     {
+        AuthorisedUsers authUsers = new AuthorisedUsers();
         private readonly ILogger<HomeController> _logger;
 
         public string username = "";
@@ -42,28 +44,34 @@ namespace VehicleManagement.Controllers
             _logger = logger;
         }
 
+        // Load the index page
         public IActionResult Index()
         {
             return View();
         }
 
+        // Load the success page
         public IActionResult Success()
         {
             return View();
         }
 
+        // Load the generate PO Code page
         public IActionResult GeneratePOCode()
         {
             return View();
         }
 
+        // Load the add hire vehicle page
         public IActionResult AddHireVehicle()
         {
             return View();
         }
 
+        // Load the hire form page and await user request type
         public IActionResult LoadHireForm(int id)
         {
+            // load pages based on the request type
             string viewToLoad;
             if (id == 1)
             {
@@ -77,12 +85,16 @@ namespace VehicleManagement.Controllers
             return PartialView(viewToLoad);
         }
 
+        // Add hire vehicle form processor
         [HttpPost]
         public IActionResult AddHireVehicle(AddHireVehicleModel hireVehicle, string user, int requestId)
         {
-
+            // get the current date in SQL Server format
             var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
-            if (requestId == 1)
+
+            // Create a new hire vehicle record in SQL Server
+
+            if (requestId == 1) // 
             {
                 var insertSql = @"INSERT INTO loadingApp.dbo.vehiclesHire (oakPONumber,hiredFor,vehicleRegistration,make,model,hireCompany,hireProvider,hiredFrom,reasonForHire,dateAddedToMid,payloadCapacity,vehicleReplacing,isDiscontinued) VALUES
                              ('" + hireVehicle.OakPONumber +
@@ -99,10 +111,13 @@ namespace VehicleManagement.Controllers
                              ",'" + hireVehicle.VehicleReplacing +
                              "',0)";
 
+                // check if vehicle registration already exists
                 var checkDb = @"SELECT vehicleRegistration FROM loadingApp.dbo.vehiclesHire WHERE vehicleRegistration = '" + hireVehicle.VehicleRegistration + "'";
+                // record the insert action to the vehicle history log
                 var addHistory = @"INSERT INTO loadingApp.dbo.vehicleHistory (vehicleRegistration, actionReason, actionDate, additionalComments, actionUser) 
                                 VALUES ('" + hireVehicle.VehicleRegistration + "',14,'" + currentDate + "','" + "No Comments" + "','" + user + "')";
                 var checkResult = SQLDataAccess.LoadData<string>(checkDb);
+                // throw response to view 
                 if (checkResult.Count > 0)
                 {
                     TempData["notice"] = hireVehicle.VehicleRegistration + " already exists";
@@ -155,43 +170,57 @@ namespace VehicleManagement.Controllers
             }
         }
 
+        // fetch the last row added to the hire vehicles table
         public int GetLastHireId()
         {
             var getId = "SELECT MAX(Id) as lastId FROM loadingApp.dbo.vehiclesHire";
             return SQLDataAccess.LoadData<int>(getId).First();
         }
 
+        // load the privacy page
         public IActionResult Privacy()
         {
             return View();
         }
 
+        // load the error page
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        // this is the home page (replacing index.cshtml)
         public IActionResult Vehicles()
         {
+            System.Diagnostics.Debug.WriteLine(System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+            var logSession = @"INSERT INTO vmsSessionLog SELECT TOP 1 '" + System.Security.Principal.WindowsIdentity.GetCurrent().Name + "', GETDATE()";
+            SQLDataAccess.SaveData(logSession,"");
+            //System.Diagnostics.Debug.WriteLine(User.IsInRole(""));
+
             return View();
         }
 
+        // load the add vehicle page
         public IActionResult AddVehicle()
         {
             return View();
         }
 
+        // load the add make/model page
         public IActionResult AddMakeModel()
         {
             return View();
         }
 
+        // Add make/model form processor
         [HttpPost]
         public IActionResult AddMakeModel(AddMakeModelClass addMakeModel)
         {
             var insertSql = @"INSERT INTO loadingApp.dbo.vehicleMake (name,model) VALUES ('" + addMakeModel.Make + "','" + addMakeModel.Model + "')";
             var checkDbQuery = @"SELECT name, model FROM loadingApp.dbo.vehicleMake WHERE name = '" + addMakeModel.Make + "' AND model = '" + addMakeModel.Model + "'";
+
+            // check that the current make and model doesn't already exist
             var returnData = SQLDataAccess.LoadData<AddMakeModelClass>(checkDbQuery);
             if (returnData.Count > 0)
             {
@@ -205,36 +234,43 @@ namespace VehicleManagement.Controllers
             return View();
         }
 
+        // load the edit vehicle page
         public IActionResult EditVehicle()
         {
             return View();
         }
 
+        // load the discontinue vehicle page
         public IActionResult DiscontinueVehicle()
         {
             return View();
         }
 
+        // load the edit vehicles page, loading the vehicle details requested by the user
         public IActionResult EditVehicles(int Id)
         {
             var returnVehicles = GetVehiclesForEdit(Id);
             return PartialView("~/Views/Home/PartialViews/_EditVehicles.cshtml", returnVehicles);
         }
 
+        // load the discontinue vehicles page, loading the vehicle details requested by the user
         public IActionResult VehiclesToDiscontinue(int Id)
         {
             var returnVehicles = GetVehicles(Id);
             return PartialView("~/Views/Home/PartialViews/_DiscontinueVehicle.cshtml", returnVehicles);
         }
 
+        // load the upload documents page, passing in the vehicle selected by the user
         public IActionResult UploadDocs(int Id)
         {
             var returnVehicles = GetAllVehicles(Id);
             return PartialView("~/Views/Home/PartialViews/_UploadDocuments.cshtml", returnVehicles);
         }
 
+        // load the PO number page
         public IActionResult LoadPONumber(string Id)
         {
+            // fetch the last created PO number
             var sql = @"SELECT MAX(Id) AS Id FROM [loadingApp].[dbo].[hirePONumbers]";
             var poId = SQLDataAccess.LoadData<string>(sql);
 
@@ -242,16 +278,20 @@ namespace VehicleManagement.Controllers
             {
                 PONumber = Id + "/" + DateTime.Now.Year.ToString().Substring(2) + "/" + poId.First().ToString()
             };
+
+            // Save the new PO number to the database
             var logPONumber = @"INSERT INTO [loadingApp].[dbo].[hirePONumbers] VALUES ('" + purchaseOrderNumber.PONumber + "')";
             SQLDataAccess.SaveData(logPONumber, purchaseOrderNumber);
             return PartialView("~/Views/Home/PartialViews/_LoadPurchaseOrderNumber.cshtml", purchaseOrderNumber);
         }
 
+        // load the Upload Documents page
         public IActionResult UploadDocuments()
         {
             return View();
         }
 
+        // load all active vehicles to the edit page
         public List<EditVehicle> GetVehiclesForEdit(int Id)
         {
             var dynamicWhere = "";
@@ -286,6 +326,7 @@ namespace VehicleManagement.Controllers
             return SQLDataAccess.LoadData<EditVehicle>(sql);
         }
 
+        // load all active hire vehicles to the edit page 
         public IActionResult GetHireVehiclesForEdit()
         {
             string sql = @"SELECT [Id]
@@ -309,6 +350,7 @@ namespace VehicleManagement.Controllers
             return View(hireVehicles);
         }
 
+        // fetch the specific details of a hire vehicle using the id
         public IActionResult LoadHireVehiclesForEdit(int id)
         {
             string sql = @"SELECT [Id]
@@ -333,6 +375,7 @@ namespace VehicleManagement.Controllers
             return View("~/Views/Home/EditIndividualHireVehicle.cshtml", hireVehicles);
         }
 
+        // load the list of hire vehicles for the discontinue list
         public IActionResult DiscontinueHireVehicle()
         {
             string sql = @"SELECT [Id]
@@ -356,6 +399,7 @@ namespace VehicleManagement.Controllers
             return View(hireVehicles);
         }
 
+        // process the edit hire vehicle form
         [HttpPost]
         public IActionResult EditHireVehicle(EditHireVehicle editHireVehicle, string user)
         {
@@ -404,10 +448,11 @@ namespace VehicleManagement.Controllers
             var addHistory = @"INSERT INTO loadingApp.dbo.vehicleHistory (vehicleRegistration, actionReason, actionDate, additionalComments, actionUser) 
                                 VALUES ('" + editHireVehicle.VehicleRegistration + "',15,'" + currentDate + "','" + "No Comments" + "','" + user + "')";
             SQLDataAccess.SaveData(updateSql, editHireVehicle);
-            TempData["saved"] = editHireVehicle.VehicleRegistration + " updated successfully!";
+            TempData["saved"] = editHireVehicle.VehicleRegistration + " updated successfully!"; // render validation message to the page
             return RedirectToAction("GetHireVehiclesForEdit");
         }
 
+        // Return a list of active vehicles in the depot selected
         public List<DiscontinueVehicleModel> GetVehicles(int Id)
         {
             string sql = @"SELECT [Id]
@@ -435,6 +480,7 @@ namespace VehicleManagement.Controllers
             return SQLDataAccess.LoadData<DiscontinueVehicleModel>(sql);
         }
 
+        // Reutrn a list of all vehicles in the depot selected
         public List<DiscontinueVehicleModel> GetAllVehicles(int Id)
         {
             string sql = @"SELECT [Id]
@@ -462,6 +508,7 @@ namespace VehicleManagement.Controllers
             return SQLDataAccess.LoadData<DiscontinueVehicleModel>(sql);
         }
 
+        // load the data for the selected vehicle
         public IActionResult LoadVehicleForEdit(int Id)
         {
             string sql = @"SELECT [Id]
@@ -491,6 +538,7 @@ namespace VehicleManagement.Controllers
             return View("~/Views/Home/EditIndividualVehicle.cshtml", getVehicle);
         }
 
+        // Show a list of any inactive vehicle that has not been sold
         public IActionResult ReinstateVehicle()
         {
             string sql = @"SELECT
@@ -521,6 +569,7 @@ namespace VehicleManagement.Controllers
             return View(getVehicle);
         }
 
+        // Update the database with updated vehicle information
         [HttpPost]
         public IActionResult EditIndividualVehicle(EditVehicle vehicle, string user)
         {
@@ -545,6 +594,8 @@ namespace VehicleManagement.Controllers
                            "', masternaught = '" + vehicle.Masternaught +
                            "', payloadCapacity = " + vehicle.PayLoadCapacity +
                            " WHERE vanRegistration = '" + vehicle.VanRegistration + "'";
+
+            // Add history log
             var addHistory = @"INSERT INTO loadingApp.dbo.vehicleHistory (vehicleRegistration, actionReason, actionDate, additionalComments, actionUser) 
                                 VALUES ('" + vehicle.VanRegistration + "',15,'" + currentDate + "','" + "No Comments" + "','" + user + "')";
             SQLDataAccess.SaveData(sql, vehicle);
@@ -553,6 +604,7 @@ namespace VehicleManagement.Controllers
             return RedirectToAction("Success");
         }
 
+        // Process the new vehicle form
         [HttpPost]
         public IActionResult AddVehicle(AddVehicleModel vehicle, string user)
         {
@@ -593,7 +645,10 @@ namespace VehicleManagement.Controllers
                                        + "','" + motD
                                        + "'," + vehicle.InWarranty + "," + vehicle.ServiceInterval + ",'" +
                                        vehicle.Driver + "','" + vehicle.Livery + "','" + vehicle.TyreSize + "'," + vehicle.Camera + ",'" + vehicle.Masternaught + "',0," + vehicle.PayLoadCapacity + ")";
+
+            // Check the vehicle doesn't exist
             var checkDb = @"SELECT vanRegistration vanRegistration FROM loadingApp.dbo.vehicles WHERE vanRegistration = '" + vehicle.VehicleRegistration + "'";
+            // Add history log
             var addHistory = @"INSERT INTO loadingApp.dbo.vehicleHistory (vehicleRegistration, actionReason, actionDate, additionalComments, actionUser) 
                                 VALUES ('" + vehicle.VehicleRegistration + "',14,'" + currentDate + "','" + "No Comments" + "','" + user + "')";
             var checkResult = SQLDataAccess.LoadData<string>(checkDb);
@@ -611,6 +666,7 @@ namespace VehicleManagement.Controllers
             return PartialView("~/Views/Home/PartialViews/_Success.cshtml");
         }
 
+        // fetch the number of records with the given vehicle registration
         [HttpPost]
         public string CheckDatabase(string data)
         {
@@ -626,6 +682,7 @@ namespace VehicleManagement.Controllers
             }
         }
 
+        // load a list of vehicles with approaching tax due dates
         public IActionResult UpcomingTax()
         {
             string sql = @"SELECT
@@ -658,6 +715,7 @@ namespace VehicleManagement.Controllers
             return View(upcomingServices);
         }
 
+        // load a list of vehicles with approaching MOT due dates
         public IActionResult UpcomingMOT()
         {
             string sql = @"SELECT
@@ -690,6 +748,7 @@ namespace VehicleManagement.Controllers
             return View(upcomingServices);
         }
 
+        // load of a list of vehicles where the miles until next service is approaching
         public IActionResult UpcomingServices()
         {
             string sql = @"SELECT
@@ -715,6 +774,7 @@ namespace VehicleManagement.Controllers
             return View(upcomingServices);
         }
 
+        // load a list of vehicles where the warranty is nearly expired
         public IActionResult UpcomingWarranty()
         {
             string sql = @"SELECT
@@ -740,6 +800,7 @@ namespace VehicleManagement.Controllers
             return View(upcomingServices);
         }
 
+        // create a set of dashboard metrics and return to page as numerical values
         public IActionResult Dashboard()
         {
             string sql = @"SELECT
@@ -822,6 +883,7 @@ namespace VehicleManagement.Controllers
             return View(metricData);
         }
 
+        // count the number of reported defects per vehicle
         public IActionResult VehicleDefectsDetail(int depot)
         {
             string sql = @"SELECT
@@ -934,6 +996,7 @@ namespace VehicleManagement.Controllers
             return View(inspectionDetail);
         }
 
+        // return the actual defects reported
         public IActionResult IndividualVehicleDefects(string reg)
         {
             string sql = @"SELECT
@@ -1049,6 +1112,7 @@ namespace VehicleManagement.Controllers
             return View(individualInspection);
         }
 
+        // load the detail of each vehicle inspection
         public IActionResult IndividualVehicleInspections(string reg, int checkId)
         {
             string sql = @"SELECT
@@ -1149,6 +1213,7 @@ namespace VehicleManagement.Controllers
             return View("/Views/Home/IndividualVehicleDefects.cshtml", individualInspection);
         }
 
+        // load any vehicles that have not been checker per depot
         public IActionResult VehiclesNotChecked(int depot)
         {
             string sql = @"SELECT
@@ -1197,6 +1262,7 @@ namespace VehicleManagement.Controllers
             return View(notChecked);
         }
 
+        // fetch the list of makes
         public static List<VehicleMakesModel> GetMakes()
         {
             string sqlquery = @"SELECT DISTINCT 1 as Id, name AS Text FROM loadingApp.dbo.vehicleMake";
@@ -1205,6 +1271,7 @@ namespace VehicleManagement.Controllers
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        // call the list of vehicle makes and create an array for the select2 dropdown list
         public ActionResult GetVehicleMakes(string q)
         {
             var makesFetched = GetMakes();
@@ -1215,49 +1282,56 @@ namespace VehicleManagement.Controllers
             return Json(new { items = makesFetched });
         }
 
+        // fetch the list of models
         public static List<VehicleMakesModel> GetModels()
         {
             string sqlquery = @"SELECT DISTINCT 1 as Id, model AS Text FROM loadingApp.dbo.vehicleMake";
             return SQLDataAccess.LoadData<VehicleMakesModel>(sqlquery);
         }
 
-
+        // fetch the list of vehicle registration numbers
         public static List<VehicleRegistrationListModel> GetRegistrations(int depot)
         {
             string sql = @"SELECT 1 as Id, vanRegistration as Text FROM loadingApp.dbo.vehicles WHERE depot = " + depot + " AND isDiscontinued = 0";
             return SQLDataAccess.LoadData<VehicleRegistrationListModel>(sql);
         }
 
+        // fecth the list of discontinue reasons
         public static List<ReasonListModel> GetDiscontinueReason()
         {
             string sql = @"SELECT Id, reason AS Text FROM loadingApp.dbo.vehicleActions WHERE statusCode = 2";
             return SQLDataAccess.LoadData<ReasonListModel>(sql);
         }
 
+        // fecth the list of update reasons
         public static List<ReasonListModel> GetUpdateReason()
         {
             string sql = @"SELECT Id, reason AS Text FROM loadingApp.dbo.vehicleActions WHERE statusCode = 3";
             return SQLDataAccess.LoadData<ReasonListModel>(sql);
         }
 
+        // fecth the list of reinstate reasons
         public static List<ReasonListModel> GetReinstateReason()
         {
             string sql = @"SELECT Id, reason AS Text FROM loadingApp.dbo.vehicleActions WHERE statusCode = 1";
             return SQLDataAccess.LoadData<ReasonListModel>(sql);
         }
 
+        // fecth the list of cost centre codes
         public static List<CostCentreModel> GetCostCentreCode()
         {
             string sql = @"SELECT costCentre AS Text, code AS Id FROM loadingApp.dbo.hireCostCentre";
             return SQLDataAccess.LoadData<CostCentreModel>(sql);
         }
 
+        // fecth the list of both fleet and hire vehicle registrations
         public static List<VehicleRegistrationListModel> GetAllRegistrations()
         {
             string sql = @"SELECT 1 as Id, vanRegistration as Text FROM loadingApp.dbo.vehicles UNION ALL SELECT 1 as Id, vehicleRegistration as Text FROM loadingApp.dbo.vehiclesHire";
             return SQLDataAccess.LoadData<VehicleRegistrationListModel>(sql);
         }
 
+        // call the list of cost centres and create an array for the select2 dropdown list
         public ActionResult GetCostCentreCodes(string q)
         {
             var codesFetched = GetCostCentreCode();
@@ -1268,6 +1342,7 @@ namespace VehicleManagement.Controllers
             return Json(new { items = codesFetched });
         }
 
+        // call the list of vehicle models and create an array for the select2 dropdown list
         public ActionResult GetVehicleModels(string q)
         {
             var makesFetched = GetModels();
@@ -1278,6 +1353,7 @@ namespace VehicleManagement.Controllers
             return Json(new { items = makesFetched });
         }
 
+        // call the list of both fleet and rental vehicle registrations and create an array for the select2 dropdown list
         public ActionResult GetAllVehicleRegistrations(string q)
         {
             var regsFetched = GetAllRegistrations();
@@ -1288,6 +1364,7 @@ namespace VehicleManagement.Controllers
             return Json(new { items = regsFetched });
         }
 
+        // call the list of fleet vehicles and create an array for the select2 dropdown list
         public ActionResult GetVehicleRegistrations(string q, int depot)
         {
             var regsFetched = GetRegistrations(depot);
@@ -1298,6 +1375,7 @@ namespace VehicleManagement.Controllers
             return Json(new { items = regsFetched });
         }
 
+        // call the list of discontinue reasons and create an array for the select2 dropdown list
         public ActionResult GetDiscontinueReasons(string q)
         {
             var reasonsFetched = GetDiscontinueReason();
@@ -1308,6 +1386,7 @@ namespace VehicleManagement.Controllers
             return Json(new { items = reasonsFetched });
         }
 
+        // call the list of update reasons and create an array for the select2 dropdown list
         public ActionResult GetUpdateReasons(string q)
         {
             var reasonsFetched = GetUpdateReason();
@@ -1318,6 +1397,7 @@ namespace VehicleManagement.Controllers
             return Json(new { items = reasonsFetched });
         }
 
+        // call the list of reinstate reasons and create an array for the select2 dropdown list
         public ActionResult GetReinstateReasons(string q)
         {
             var reasonsFetched = GetReinstateReason();
@@ -1328,6 +1408,7 @@ namespace VehicleManagement.Controllers
             return Json(new { items = reasonsFetched });
         }
 
+        // return an object for the vehicle registration to be passed to the modal pop up view for updating tax records
         public IActionResult UpdateVehicleTax(string data)
         {
             VehicleRegistrationModel vehicleRegistration = new VehicleRegistrationModel()
@@ -1337,6 +1418,7 @@ namespace VehicleManagement.Controllers
             return PartialView("~/Views/Home/PartialViews/_UpdateVehicleTax.cshtml", vehicleRegistration);
         }
 
+        // return an object for the vehicle registration to be passed to the modal pop up view for updating MOT records
         public IActionResult UpdateVehicleMOT(string data)
         {
             VehicleRegistrationModel vehicleRegistration = new VehicleRegistrationModel
@@ -1346,6 +1428,7 @@ namespace VehicleManagement.Controllers
             return PartialView("~/Views/Home/PartialViews/_UpdateVehicleMOT.cshtml", vehicleRegistration);
         }
 
+        // return an object for the vehicle registration to be passed to the modal pop up view for updating service records
         public IActionResult UpdateVehicleService(string data)
         {
             VehicleRegistrationModel vehicleRegistration = new VehicleRegistrationModel()
@@ -1355,6 +1438,7 @@ namespace VehicleManagement.Controllers
             return PartialView("~/Views/Home/PartialViews/_UpdateVehicleService.cshtml", vehicleRegistration);
         }
 
+        // return an object for the vehicle registration to be passed to the modal pop up view for discontinuing vehicles
         public IActionResult LoadDiscontinueVehicleModal(string data)
         {
             VehicleRegistrationModel vehicleRegistration = new VehicleRegistrationModel()
@@ -1364,6 +1448,7 @@ namespace VehicleManagement.Controllers
             return PartialView("~/Views/Home/PartialViews/_DiscontinueVehicleConfirmation.cshtml", vehicleRegistration);
         }
 
+        // return an object for the vehicle registration to be passed to the modal pop up view for reinstating vehicles
         public IActionResult UpdateReinstateVehicle(string data)
         {
             VehicleRegistrationModel vehicleRegistration = new VehicleRegistrationModel
@@ -1373,6 +1458,7 @@ namespace VehicleManagement.Controllers
             return PartialView("~/Views/Home/PartialViews/_UpdateReinstateVehicle.cshtml", vehicleRegistration);
         }
 
+        // return an object for the vehicle registration to be passed to the modal pop up view for updating warranty records
         public IActionResult UpdateVehicleWarranty(string data)
         {
             VehicleRegistrationModel vehicleRegistration = new VehicleRegistrationModel
@@ -1382,6 +1468,7 @@ namespace VehicleManagement.Controllers
             return PartialView("~/Views/Home/PartialViews/_UpdateVehicleWarranty.cshtml", vehicleRegistration);
         }
 
+        // return an object for the vehicle registration to be passed to the modal pop up view for uploading documents
         public IActionResult UpdateDocuments(string data)
         {
             VehicleRegistrationModel vehicleRegistration = new VehicleRegistrationModel
@@ -1391,6 +1478,7 @@ namespace VehicleManagement.Controllers
             return PartialView("~/Views/Home/PartialViews/_UploadDocumentsConfirmation.cshtml", vehicleRegistration);
         }
 
+        // return an object for the vehicle registration to be passed to the modal pop up view for off hiring vehicles
         public IActionResult LoadDiscontinueHireVehicleModal(string data)
         {
             VehicleRegistrationModel vehicleRegistration = new VehicleRegistrationModel
@@ -1400,6 +1488,7 @@ namespace VehicleManagement.Controllers
             return PartialView("~/Views/Home/PartialViews/_DiscontinueHireVehicle.cshtml", vehicleRegistration);
         }
 
+        // process the discontinue fleet vehicle form
         [HttpPost]
         public void SaveDiscontinue(string data)
         {
@@ -1416,6 +1505,7 @@ namespace VehicleManagement.Controllers
             SQLDataAccess.SaveData(updateVehiclesList, discontinue);
         }
 
+        // process the discontinue hire vehicle form
         [HttpPost]
         public void SaveHireDiscontinue(string data)
         {
@@ -1432,6 +1522,7 @@ namespace VehicleManagement.Controllers
             SQLDataAccess.SaveData(updateVehiclesList, discontinue);
         }
 
+        // process the reinstate vehicle form
         [HttpPost]
         public void SaveReinstate(string data)
         {
@@ -1453,6 +1544,7 @@ namespace VehicleManagement.Controllers
         //    host = environment;
         //}
 
+        // process the update MOT form
         [HttpPost]
         public IActionResult UploadMOTUpdate(IFormFile update, string reasonCode, string vanReg, string userName, DateTime motMonths)
         {
@@ -1474,6 +1566,7 @@ namespace VehicleManagement.Controllers
                         Directory.CreateDirectory(rootFilePath);
                     }
 
+                    // save uploaded file to the file system (shared drive)
                     using (FileStream fs = System.IO.File.Create(filePath))
                     {
                         update.CopyTo(fs);
@@ -1495,6 +1588,7 @@ namespace VehicleManagement.Controllers
             return RedirectToAction("UpcomingMOT");
         }
 
+        // process the tax update form
         [HttpPost]
         public IActionResult UploadTAXUpdate(string reasonCode, string vanReg, DateTime taxMonths, string userName)
         {
@@ -1533,6 +1627,7 @@ namespace VehicleManagement.Controllers
                         Directory.CreateDirectory(rootFilePath);
                     }
 
+                    // save uploaded file to the file system (shared drive)
                     using (FileStream fs = System.IO.File.Create(filePath))
                     {
                         update.CopyTo(fs);
@@ -1555,6 +1650,7 @@ namespace VehicleManagement.Controllers
             return RedirectToAction("UpcomingServices");
         }
 
+        // process the upload documents form
         [HttpPost]
         public IActionResult UploadDocuments(IFormFile update, string reasonCode, string vanReg, string userName, string uploadComments)
         {
@@ -1577,6 +1673,7 @@ namespace VehicleManagement.Controllers
                         Directory.CreateDirectory(rootFilePath);
                     }
 
+                    // save file to file system (shared drive)
                     using (FileStream fs = System.IO.File.Create(filePath))
                     {
                         update.CopyTo(fs);
@@ -1595,6 +1692,7 @@ namespace VehicleManagement.Controllers
             return RedirectToAction("UploadDocuments");
         }
 
+        // process the update warranty form
         [HttpPost]
         public IActionResult UploadWarrantyUpdate(string vanReg)
         {
@@ -1603,6 +1701,7 @@ namespace VehicleManagement.Controllers
             return RedirectToAction("UpcomingWarranty");
         }
 
+        // convert byte stream to png image file
         public static byte[] BitmapToBytes(Bitmap img)
         {
             using (var stream = new MemoryStream())
@@ -1612,6 +1711,7 @@ namespace VehicleManagement.Controllers
             }
         }
 
+        // convert vehicle registration to a QR code image
         public IActionResult GenerateQRCode(string vehicleRegistration)
         {
             QRCodeGenerator qRCodeGenerator = new QRCodeGenerator();
@@ -1626,6 +1726,7 @@ namespace VehicleManagement.Controllers
             return View(qR);
         }
 
+        // fetch all vehicles
         public IActionResult AllVehicles()
         {
             string sql = @"SELECT [Id]
@@ -1680,6 +1781,7 @@ namespace VehicleManagement.Controllers
             return View(allVans);
         }
 
+        // fetch the list of vehicles for vehicle history
         public IActionResult VehicleActionHistory()
         {
             string sql = @"SELECT 
@@ -1706,6 +1808,7 @@ namespace VehicleManagement.Controllers
             return View(allVehicles);
         }
 
+        // show the full history detail of any given vehicle
         public IActionResult VehicleHistoryDetail(string vehicleRegistration)
         {
             string sql = @"SELECT
@@ -1736,6 +1839,7 @@ namespace VehicleManagement.Controllers
             return View(vehicleHistory);
         }
 
+        // fetch each inspection carried out in the last 7 days
         public IActionResult InspectionHistory()
         {
             string sql = @"SELECT 
@@ -1865,7 +1969,7 @@ namespace VehicleManagement.Controllers
             return View(inspections);
         }
 
-
+        // deprecated code
         public IActionResult VehicleInspectionDetail(int InspectionItem)
         {
             string sql = @"SELECT 
@@ -1950,6 +2054,12 @@ namespace VehicleManagement.Controllers
                                     FROM loadingApp.dbo.vanInspection
                                     INNER JOIN(SELECT vehicleRegistration, MAX(Id) AS Id FROM loadingApp.dbo.vanInspection GROUP BY vehicleRegistration) L ON L.Id = vanInspection.Id
                                     INNER JOIN loadingApp.dbo.vehicles ON vehicles.vanRegistration = vanInspection.vehicleRegistration
+									WHERE vanInspection.vehicleRegistration NOT IN (
+										SELECT
+											vehicleRegistration
+										FROM loadingApp.dbo.vehicleHistory
+										WHERE actionReason = 6
+									)
                                     ORDER BY 4,1";
             var mileageReport = SQLDataAccess.LoadData<MileageReportModel>(mileageReportSQL);
             return View(mileageReport);

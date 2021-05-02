@@ -1,4 +1,5 @@
-﻿function showVehicleByDepot() {
+﻿// collect the selected depot and pass to the back end. Load a partial view to the current page and append to the div
+function showVehicleByDepot() {
     var depotList = document.getElementById("depotList");
     depotList = depotList.options[depotList.selectedIndex].value;
 
@@ -10,6 +11,7 @@
     });
 }
 
+// collect the vehicle registration from the back end and load partial view to the tax update modal view
 function loadTaxUpdaterModal(vehicleReg) {
     var selectedVehicle = vehicleReg;
     $.get("/Home/UpdateVehicleTax", { 'data': selectedVehicle }, function (html) {
@@ -19,6 +21,7 @@ function loadTaxUpdaterModal(vehicleReg) {
     })
 }
 
+// collect the vehicle registration from the back end and load partial view to the MOT update modal view
 function loadMOTUpdaterModal(vehicleReg) {
     var selectedVehicle = vehicleReg;
     $.get("/Home/UpdateVehicleMOT", { 'data': selectedVehicle }, function (html) {
@@ -28,6 +31,7 @@ function loadMOTUpdaterModal(vehicleReg) {
     })
 }
 
+// collect the vehicle registration from the back end and load partial view to the service update modal view
 function loadServiceUpdaterModal(vehicleReg) {
     var selectedVehicle = vehicleReg;
     $.get("/Home/UpdateVehicleService", { 'data': selectedVehicle }, function (html) {
@@ -37,6 +41,7 @@ function loadServiceUpdaterModal(vehicleReg) {
     })
 }
 
+// collect the vehicle registration from the back end and load partial view to the service update modal view
 function showVehiclesByDepotToDiscontinue() {
     var selectedDepot = document.getElementById("depotListDiscontinue");
     selectedDepot = selectedDepot.options[selectedDepot.selectedIndex].value;
@@ -49,6 +54,7 @@ function showVehiclesByDepotToDiscontinue() {
     });
 }
 
+// collect the vehicle registration from the back end and load partial view to the service update modal view
 function loadDeductionConfirmation(vehicleReg) {
     var selectedVehicle = vehicleReg;
     $.get("/Home/LoadDiscontinueVehicleModal", { 'data': selectedVehicle }, function (html) {
@@ -59,6 +65,7 @@ function loadDeductionConfirmation(vehicleReg) {
     })
 }
 
+// collect the vehicle registration from the back end and load partial view to the reinstate vehicle modal view
 function reinstateUpdaterModal(vehicleReg) {
     var selectedVehicle = vehicleReg;
     $.get("/Home/UpdateReinstateVehicle", { 'data': selectedVehicle }, function (html) {
@@ -68,6 +75,7 @@ function reinstateUpdaterModal(vehicleReg) {
     })
 }
 
+// collect form input data and send to the back end
 function postDiscontinueVehicle() {
         var vehicleReg = $("#vReg").html();
         var selectedReason = $("#reasonList").val();
@@ -87,6 +95,7 @@ function postDiscontinueVehicle() {
     }
 }
 
+// collect form input data and send to the back end
 function postReinstateVehicle() {
     var vehicleReg = $("#reinstateReg").html();
     var selectedReason = $("#reinstateReason").val();
@@ -108,6 +117,7 @@ function postReinstateVehicle() {
     }
 }
 
+// collect the vehicle registration from the back end and load partial view to the update warranty modal view
 function loadWarrantyUpdaterModal(vehicleReg) {
     var selectedVehicle = vehicleReg;
     $.get("/Home/UpdateVehicleWarranty", { 'data': selectedVehicle }, function (html) {
