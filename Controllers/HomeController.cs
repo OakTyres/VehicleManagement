@@ -193,9 +193,9 @@ namespace VehicleManagement.Controllers
         // this is the home page (replacing index.cshtml)
         public IActionResult Vehicles()
         {
-            System.Diagnostics.Debug.WriteLine(System.Security.Principal.WindowsIdentity.GetCurrent().Name);
-            var logSession = @"INSERT INTO vmsSessionLog SELECT TOP 1 '" + System.Security.Principal.WindowsIdentity.GetCurrent().Name + "', GETDATE()";
-            SQLDataAccess.SaveData(logSession,"");
+            //System.Diagnostics.Debug.WriteLine(System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+            //var logSession = @"INSERT INTO vmsSessionLog SELECT TOP 1 '" + System.Security.Principal.WindowsIdentity.GetCurrent().Name + "', GETDATE()";
+            //SQLDataAccess.SaveData(logSession,"");
             //System.Diagnostics.Debug.WriteLine(User.IsInRole(""));
 
             return View();

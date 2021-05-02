@@ -11,7 +11,7 @@ namespace VehicleManagement.Models
 {
     public static class SQLDataAccess
     {
-            public static string GetConnectionString(string connectionName = "Data Source=OAKSQL04; Initial Catalog = loadingApp; User Id=loadingApp.service; Password=3M55ATk2TMAA; Pooling=False;Connect Timeout = 30")
+            public static string GetConnectionString(string connectionName = "Data Source=OAKSQL03; Initial Catalog = loadingApp; User Id=loadingApp.service; Password=3M55ATk2TMAA; Pooling=False;Connect Timeout = 30")
             {
                 return connectionName;
             }
